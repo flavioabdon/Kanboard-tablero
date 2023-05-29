@@ -275,7 +275,7 @@
                                 Swal.fire({
                                 position: 'top-star',
                                 icon: 'error',
-                                title: 'Contraseña equivocada',
+                                title: 'Contraseña incorrecta',
                                 showConfirmButton: false,
                                 timer: 1500
                                 })
@@ -302,23 +302,6 @@
             }
         }
     </script>
-    <form name="formularioDatos" method="post" action="c_inicio_sesion/verificar_usuario">
-
-<p> CÁLCULO DEL VOLUMEN DE UN CILINDRO </p>
-
-<br/>
-
-Introduzca el diámetro en metros: <input type="text" name="input_usuario" value="admin" id="input_usuario">
-
-<br/> <br/>
-
-Introduzca la altura en metros: <input type="text" name="input_contrasena" value="e10adc3949ba59abbe56e057f20f883e" id="input_contrasena">
-
-<br/> <br/>
-
-<input value="Calcular" type="submit" />
-
-</form>
 </body>
 </html>
 

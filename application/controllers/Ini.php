@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Welcome extends CI_Controller {
+class Ini extends CI_Controller {
 	function __construct(){
         parent::__construct();
     }
@@ -23,10 +23,12 @@ class Welcome extends CI_Controller {
 	 */
 	public function index()
 	{
-		$this->load->view('welcome_message');
+		 $this->layout->view('inicio');
+		// http://localhost/kanban/index.php/inicio/inicio
+		// echo "inicio";
 	}
 	public function index2()
 	{
-		$this->layout->view('welcome_message');
+		$this->load->view('welcome_message');
 	}
 }
