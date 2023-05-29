@@ -24,8 +24,6 @@ class Inicio extends CI_Controller {
 	public function index()
 	{
 		 $this->layout->view('inicio');
-		// http://localhost/kanban/index.php/inicio/inicio
-		// echo "inicio";
 	}
 	public function index2()
 	{
