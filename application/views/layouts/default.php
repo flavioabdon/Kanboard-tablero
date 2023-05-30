@@ -41,12 +41,6 @@
       <li class="nav-item">
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
-      <li class="nav-item d-none d-sm-inline-block">
-        <a href="index3.html" class="nav-link">Home</a>
-      </li>
-      <li class="nav-item d-none d-sm-inline-block">
-        <a href="#" class="nav-link">Contact</a>
-      </li>
     </ul>
 
     <!-- Right navbar links -->
@@ -77,11 +71,13 @@
       <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#">
           <i class="far fa-comments"></i>
-          <span class="badge badge-danger navbar-badge">3</span>
+          <span class="badge badge-danger navbar-badge">0</span>
         </a>
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+          <span class="dropdown-item dropdown-header">0 Notifications</span>
           <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item dropdown-footer">See all notifications</a>
         </div>
       </li>
       <!-- Notifications Dropdown Menu -->
@@ -107,6 +103,31 @@
           <i class="fas fa-th-large"></i>
         </a>
       </li>
+      <!-- li -->
+      <li>
+
+
+        <a class="nav-link"  style="padding:0px 5px 5px 40px;" data-toggle="dropdown" href="#">
+          
+          <span class="badge  navbar-badge" >
+                <div class="user-panel d-flex">
+                  <div class="image">
+                    <img src="<?= base_url() ?>assets/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+                  </div>
+                </div>
+          </span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+          <span class="dropdown-item dropdown-header">
+          <div class="image" width=50 height=50 style="padding:10px 8px 10px 8px;">
+                    <img src="<?= base_url() ?>assets/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+                  </div>
+          </span>
+          <div class="dropdown-divider"></div>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item dropdown-footer" onClick="cerrar_sesion()">Cerrar Sesión</a>
+        </div>
+      <!-- fi li -->
     </ul>
   </nav>
   <!-- /.navbar -->
@@ -122,14 +143,6 @@
     <!-- Sidebar -->
     <div class="sidebar">
       <!-- Sidebar user panel (optional) -->
-      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-        <div class="image">
-          <img src="<?= base_url() ?>assets/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
-        </div>
-        <div class="info">
-          <a href="#" class="d-block">Alexander Pierce</a>
-        </div>
-      </div>
 
       <!-- SidebarSearch Form -->
       <div class="form-inline">
@@ -219,90 +232,22 @@
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
-    <div class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 class="m-0">Dashboard</h1>
-          </div><!-- /.col -->
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Dashboard v1</li>
-            </ol>
-          </div><!-- /.col -->
-        </div><!-- /.row -->
-      </div><!-- /.container-fluid -->
-    </div>
     <!-- /.content-header -->
 
     <!-- Main content -->
     <section class="content">
       <?php
-      echo $content_for_layout;
+      $session_data = $this->session->all_userdata();
+
+      if (!isset($session_data['usuario_login'])) { //Si no encruentra en el array el objeto usuario_login redireccionar al login
+        redirect('/login/c_inicio_sesion', 'location');
+      } else {
+        echo $content_for_layout;
+      }      
       ?>
       <div class="container-fluid">
         <!-- Small boxes (Stat box) -->
         <div class="row">
-          <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-info">
-              <div class="inner">
-                <h3>150</h3>
-
-                <p>New Orders</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-bag"></i>
-              </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <!-- ./col -->
-          <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-success">
-              <div class="inner">
-                <h3>53<sup style="font-size: 20px">%</sup></h3>
-
-                <p>Bounce Rate</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-stats-bars"></i>
-              </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <!-- ./col -->
-          <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-warning">
-              <div class="inner">
-                <h3>44</h3>
-
-                <p>User Registrations</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-person-add"></i>
-              </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <!-- ./col -->
-          <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-danger">
-              <div class="inner">
-                <h3>65</h3>
-
-                <p>Unique Visitors</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-pie-graph"></i>
-              </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
           <!-- ./col -->
         </div>
         <!-- /.row -->
@@ -370,5 +315,18 @@
  -->
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="<?= base_url() ?>assets/dist/js/pages/dashboard.js"></script>
+<script>
+  function cerrar_sesion(){
+    console.log("cerrar");
+    $.ajax({
+                                    url: "<?php echo base_url('index.php/login/c_cerrar_sesion/cerrar_sesion'); ?>",
+                                    type: "POST",
+                                    datatype: "json", 
+                                    success: function (rsp){
+                                        location.href ="<?php echo base_url(); ?>";
+                                    }
+    });
+  }
+</script>
 </body>
 </html>

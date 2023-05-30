@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Inicio extends CI_Controller {
+class Inicial extends CI_Controller {
 	function __construct(){
         parent::__construct();
     }
@@ -23,7 +23,8 @@ class Inicio extends CI_Controller {
 	 */
 	public function index()
 	{
-		$this->layout->view('inicial/inicio');
+		// $this->layout->view('inicial/inicio');
+		echo "controlador";
 	}
 	public function index2()
 	{
