@@ -63,7 +63,8 @@ devuelve el contenido de la vista
 function view($view = null, $data = null, $return = false)
 {
 $layout = "layouts/{$this->layout}";
-$vista = (substr($view, 0, 1) == '/' ? $view : "{$this->CI->router->directory}{$this->CI->router->class}/{$view}");
+// $vista = (substr($view, 0, 1) == '/' ? $view : "{$this->CI->router->directory}{$this->CI->router->class}/{$view}");
+$vista = (substr($view, 0, 1) == '/' ? $view : "{$view}");//modificado para que cargue las vista en formato que maneja la clave load->viwe
 $load_view = array('content_for_layout' => $this->CI->load->view($vista, $data, true));
 if ( $return )
 return $this->CI->load->view($layout, $load_view, true);

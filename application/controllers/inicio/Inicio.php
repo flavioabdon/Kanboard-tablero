@@ -23,8 +23,7 @@ class Inicio extends CI_Controller {
 	 */
 	public function index()
 	{
-		//  $this->layout->view('inicio');
-		echo "Inicio";
+		$this->layout->view('inicial/inicio');
 	}
 	public function index2()
 	{
