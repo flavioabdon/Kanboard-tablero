@@ -240,7 +240,7 @@
       $session_data = $this->session->all_userdata();
 
       if (!isset($session_data['usuario_login'])) { //Si no encruentra en el array el objeto usuario_login redireccionar al login
-        redirect('/login/c_inicio_sesion', 'location');
+        redirect('/login', 'location');
       } else {
         echo $content_for_layout;
       }      
