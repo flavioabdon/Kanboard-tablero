@@ -52,6 +52,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 // login
 $route['login'] = 'login/c_inicio_sesion';
 
+// tablero
+$route['tablero'] = 'tablero/c_mostrar_tablero';
+
+// proyecto
+$route['proyectos'] = 'proyectos/c_proyecto';
+
+// tarea
+$route['tareas'] = 'tareas/c_tarea';
+
 // Por defecto
 $route['default_controller'] = 'inicial';
 $route['404_override'] = '';
