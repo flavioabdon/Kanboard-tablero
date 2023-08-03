@@ -26,8 +26,4 @@ class Inicial extends CI_Controller {
 		// $this->layout->view('inicial/inicio');
 		echo "controlador";
 	}
-	public function index2()
-	{
-		$this->load->view('welcome_message');
-	}
 }

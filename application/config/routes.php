@@ -51,7 +51,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 // login
 $route['login'] = 'login/c_inicio_sesion';
-
+// usuarios
+$route['usuarios'] = 'usuarios/c_usuarios';
+// proyectos
+$route['proyectos'] = 'proyectos/c_proyectos';
 // Por defecto
 $route['default_controller'] = 'inicial';
 $route['404_override'] = '';

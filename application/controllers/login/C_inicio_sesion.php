@@ -11,7 +11,13 @@ class C_inicio_sesion extends CI_Controller {
 
 	public function index()
 	{
-		 $this->load->view('login/login');
+		//Verificar si es que ya se inicio el login
+		$session_data = $this->session->all_userdata();
+		if (!isset($session_data['usuario_login'])) { //Si no encruentra en el array el objeto usuario_login redireccionar al login
+			$this->load->view('login/login');
+		  } else {
+			$this->layout->view('inicial/inicio');
+		  }   
 	}
 	public function verificar_usuario(){
 		$usuario_post=$this->input->post('input_usuario');
@@ -22,6 +28,6 @@ class C_inicio_sesion extends CI_Controller {
 	public function set_usuario (){
 		$usuario_post=$this->input->post('input_usuario');
 		$this->session->set_userdata("usuario_login", $usuario_post);
-		echo "Usuario logeado:".$this->session->userdata('usuario_login');;
+		echo "Usuario logeado:".$this->session->userdata('usuario_login');
 	}
 }
