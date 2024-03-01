@@ -221,7 +221,107 @@
               </li>
             </ul>
           </li>
-
+        <!-- MENU PERSONALIZADO -->
+        <li class="nav-item">
+            <a href="<?= base_url() ?>index.php/backlog" class="nav-link">
+              <i class="nav-icon fas fa-table"></i>
+              <p>
+                Backlog
+                <i class="fas  right"></i>
+              </p>
+            </a>
+        </li>
+        <!--  -->
+        <li class="nav-item">
+            <a href="<?= base_url() ?>index.php/calendario" class="nav-link">
+              <i class="nav-icon fas fa-table"></i>
+              <p>
+                Calendario
+                <i class="fas  right"></i>
+              </p>
+            </a>
+        </li>
+        <!--  -->
+        <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-table"></i>
+              <p>
+                Incidencia
+                <i class="fas  right"></i>
+              </p>
+            </a>
+        </li>
+        <!--  -->
+        <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-table"></i>
+              <p>
+                Proyecto
+                <i class="fas  right"></i>
+              </p>
+            </a>
+        </li>
+                <!--  -->
+        <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-table"></i>
+              <p>
+                Documento
+                <i class="fas  right"></i>
+              </p>
+            </a>
+        </li>
+        <!--  -->
+        <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-table"></i>
+              <p>
+                Historia
+                <i class="fas  right"></i>
+              </p>
+            </a>
+        </li>
+        <!--  -->
+        <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-table"></i>
+              <p>
+                Incidencia
+                <i class="fas  right"></i>
+              </p>
+            </a>
+        </li>
+        <!--  -->
+        <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-table"></i>
+              <p>
+                Prioridad
+                <i class="fas  right"></i>
+              </p>
+            </a>
+        </li>
+        <!--  -->
+        <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-table"></i>
+              <p>|
+                Proyecto
+                <i class="fas  right"></i>
+              </p>
+            </a>
+        </li>++
+        <!--  -->
+        <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-table"></i>
+              <p>
+                Sprint
+                <i class="fas  right"></i>
+              </p>
+            </a>
+        </li>          
+        <!-- FIN MENU PERSOLIZADO -->
         </ul>
       </nav>
       <!-- /.sidebar-menu -->

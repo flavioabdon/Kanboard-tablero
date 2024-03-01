@@ -51,11 +51,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 // login
 $route['login'] = 'login/c_inicio_sesion';
-// usuarios
-$route['usuarios'] = 'usuarios/c_usuarios';
-// proyectos
-$route['proyectos'] = 'proyectos/c_proyectos';
-//
+// backlog
+$route['backlog'] = 'backlog/c_listar';
+// calendario
+$route['calendario'] = 'calendario/c_listar';
+// incidencia
+$route['incidencia'] = 'incidencia/c_listar';
+// proyecto
+$route['proyecto'] = 'proyecto/c_listar';
+// documento
+$route['documento'] = 'documento/c_listar';
+// historia
+$route['historia'] = 'historia/c_listar';
+// sprint
+$route['sprint'] = 'sprint/c_listar';         
+
 // Por defecto
 $route['default_controller'] = 'inicial';
 $route['404_override'] = '';
