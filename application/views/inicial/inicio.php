@@ -582,3 +582,19 @@ function mostrar_detalle(id_lote) {
 }(this.materialadmin, jQuery)); // pass in (namespace, jQuery):
 
 </script>
+
+
+<!-- inscribirMateriaParalelo('INF20232-151','INFEST165-4','INF20232','A')
+inscribirMateriaParalelo('INF20232-246','INFEST165-4','INF20232','B')
+inscribirMateriaParalelo('INF20232-153','INFINF271-84','INF20232','A')
+inscribirMateriaParalelo('INF20232-248','INFINF271-84','INF20232','B')
+
+inscribirMateriaParalelo('INF20232-252','INFINF281-87','INF20232','B') -->
+<button class="btn btn-success" onclick="inscribirMateriaParalelo('INF20232-252','INFINF281-87','INF20232','B')">Inscribirse</button>
+<button class="btn btn-success" onclick="inscribirMateriaParalelo('INF20232-326','INFINF281-87','INF20232','C')">Inscribirse</button>
+
+
+
+<!-- inscribirMateriaParalelo('INF20232-152','INFINF166-83','INF20232','A')
+inscribirMateriaParalelo('INF20232-247','INFINF166-83','INF20232','B')
+inscribirMateriaParalelo('INF20232-321','INFINF166-83','INF20232','C') -->
