@@ -4,6 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class C_listar extends CI_Controller {
 	function __construct(){
         parent::__construct();
+		$this->load->model('backlog/M_listado','listado');
     }
 
 	/**
@@ -23,7 +24,11 @@ class C_listar extends CI_Controller {
 	 */
 	public function index()
 	{
-		$this->layout->view('inicial/inicio');
-		//echo "controlador index";
+		$this->layout->view('backlog/inicio');
 	}
+	public function listar_backlog(){
+        $json = $this->listado->mostrar_backlog();
+		echo json_encode($json);
+		
+    }
 }
