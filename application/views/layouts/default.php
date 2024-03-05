@@ -6,7 +6,8 @@
   <title>AdminLTE 3 | DataTables</title>
 <!-- jQuery -->
 <script src="<?= base_url() ?>assets/plugins/jquery/jquery.min.js"></script>
-
+<!-- Drag cards -->
+<script src="https://cdn.jsdelivr.net/gh/SortableJS/Sortable@1.10.2/Sortable.min.js"></script>
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
@@ -854,7 +855,6 @@
   </aside>
 
   <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
         <?php
             $session_data = $this->session->all_userdata();
 
@@ -864,7 +864,6 @@
               echo $content_for_layout;
             }      
           ?>
-  </div>
   <!-- /.content-wrapper -->
   <footer class="main-footer">
     <div class="float-right d-none d-sm-block">
