@@ -53,6 +53,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $route['login'] = 'login/c_inicio_sesion';
 // backlog
 $route['backlog'] = 'backlog/c_listar';
+$route['tablero'] = 'backlog/c_tablero';
 // calendario
 $route['calendario'] = 'calendario/c_listar';
 // incidencia

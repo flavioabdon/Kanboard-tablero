@@ -8,6 +8,10 @@
 <script src="<?= base_url() ?>assets/plugins/jquery/jquery.min.js"></script>
 <!-- Drag cards -->
 <script src="https://cdn.jsdelivr.net/gh/SortableJS/Sortable@1.10.2/Sortable.min.js"></script>
+<!-- Toast -->
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->

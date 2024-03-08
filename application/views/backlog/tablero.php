@@ -25,92 +25,77 @@
               Backlog
             </h3>
           </div>
+          <!--  -->
           <div class="card-body" id="body_backlog">
-            <div class="card card-info card-outline" id="card_3">
-              <div class="card-header">
-                <h5 class="card-title">Create Labels</h5>
-                <div class="card-tools">
-                  <a href="#" class="btn btn-tool btn-link">#3</a>
-                  <a href="#" class="btn btn-tool">
-                    <i class="fas fa-pen"></i>
-                  </a>
-                </div>
-              </div>
-              <div class="card-body">
-                <div class="custom-control custom-checkbox">
-                  <input class="custom-control-input" type="checkbox" id="customCheckbox1" disabled>
-                  <label for="customCheckbox1" class="custom-control-label">Bug</label>
-                </div>
-                <div class="custom-control custom-checkbox">
-                  <input class="custom-control-input" type="checkbox" id="customCheckbox2" disabled>
-                  <label for="customCheckbox2" class="custom-control-label">Feature</label>
-                </div>
-                <div class="custom-control custom-checkbox">
-                  <input class="custom-control-input" type="checkbox" id="customCheckbox3" disabled>
-                  <label for="customCheckbox3" class="custom-control-label">Enhancement</label>
-                </div>
-                <div class="custom-control custom-checkbox">
-                  <input class="custom-control-input" type="checkbox" id="customCheckbox4" disabled>
-                  <label for="customCheckbox4" class="custom-control-label">Documentation</label>
-                </div>
-                <div class="custom-control custom-checkbox">
-                  <input class="custom-control-input" type="checkbox" id="customCheckbox5" disabled>
-                  <label for="customCheckbox5" class="custom-control-label">Examples</label>
-                </div>
-              </div>
-            </div>
-            <div class="card card-primary card-outline" id="card_4">
-              <div class="card-header">
-                <h5 class="card-title">Create Issue template</h5>
-                <div class="card-tools">
-                  <a href="#" class="btn btn-tool btn-link">#4</a>
-                  <a href="#" class="btn btn-tool">
-                    <i class="fas fa-pen"></i>
-                  </a>
-                </div>
-              </div>
-              <div class="card-body">
-                <div class="custom-control custom-checkbox">
-                  <input class="custom-control-input" type="checkbox" id="customCheckbox1_1" disabled>
-                  <label for="customCheckbox1_1" class="custom-control-label">Bug Report</label>
-                </div>
-                <div class="custom-control custom-checkbox">
-                  <input class="custom-control-input" type="checkbox" id="customCheckbox1_2" disabled>
-                  <label for="customCheckbox1_2" class="custom-control-label">Feature Request</label>
-                </div>
-              </div>
-            </div>
-            <div class="card card-primary card-outline" id="card_6">
-              <div class="card-header">
-                <h5 class="card-title">Create PR template</h5>
-                <div class="card-tools">
-                  <a href="#" class="btn btn-tool btn-link">#6</a>
-                  <a href="#" class="btn btn-tool">
-                    <i class="fas fa-pen"></i>
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div class="card card-light card-outline" id="card_7">
-              <div class="card-header" >
-                <h5 class="card-title">Create Actions</h5>
-                <div class="card-tools">
-                  <a href="#" class="btn btn-tool btn-link">#7</a>
-                  <a href="#" class="btn btn-tool">
-                    <i class="fas fa-pen"></i>
-                  </a>
-                </div>
+          <?php
+                  //
+                  function calcularTiempoTranscurrido($fechaPasada) {
+                    $fechaPasada = new DateTime($fechaPasada);
+                    $fechaActual = new DateTime();
+                
+                    $intervalo = $fechaPasada->diff($fechaActual);
+                
+                    $anos = $intervalo->y;
+                    $meses = $intervalo->m;
+                    $dias = $intervalo->d;
+                    $horas = $intervalo->h;
+                    $minutos = $intervalo->i;
+                    $segundos = $intervalo->s;
+                
+                    if ($anos > 0) {
+                        return "Hace " . $anos . " años y " . $dias . " días.";
+                    } elseif ($dias > 0) {
+                        return "Hace " . $dias . " días.";
+                    } elseif ($horas > 0) {
+                        return "Hace " . $horas . " horas.";
+                    } elseif ($minutos > 0) {
+                        return "Hace " . $minutos . " minutos.";
+                    } else {
+                        return "Hace " . $segundos . " segundos.";
+                    }
+                }
+                  //
+                  $url = base_url()."index.php/backlog/c_tablero/lista_tablero"; // URL a la que hacer la petición
+                  $ch = curl_init($url); // Inicia una nueva sesión cURL
 
-              </div>
-              <div class="card-body">
-                <p>
-                  Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-                  Aenean commodo ligula eget dolor. Aenean massa.
-                  Cum sociis natoque penatibus et magnis dis parturient montes,
-                  nascetur ridiculus mus.
-                </p>
-              </div>
-            </div>
+                  // Configura las opciones para la transferencia cURL
+                  curl_setopt($ch, CURLOPT_POST, 1);
+                  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+                  $respuesta = curl_exec($ch); // Ejecuta la petición POST
+
+                  curl_close($ch); // Cierra la sesión cURL
+
+                  $json = json_decode($respuesta, true); // Decodifica el JSON recibido
+
+                  foreach ($json as $index => $item) {
+                      $resultado = json_decode($item["resultado"], true);
+                      if($resultado["estadohistoria"]=="backlog"){
+                        echo "<script>console.log(".$resultado["codbacklog"].");</script>";
+                        //
+                        echo '<div class="card card-light card-outline" id="card_'.$resultado["codbacklog"].'">';
+                        echo  '<div class="card-header" >';
+                        echo    '<h6 class="card-title font-weight-bold" >'.$resultado["nombreproyecto"].' </h6>';
+                        echo     '<div class="card-tools">';
+                        echo       '<a><small>'.calcularTiempoTranscurrido($resultado["fecha_creacion"]).'</small></a>';
+                        echo       '<a href="#" class="btn btn-tool btn-link">#'.$resultado["codbacklog"].'</a>';
+                        echo       '<a id="modal-51969" href="#modal-container-51969" role="button" data-toggle="modal" class="btn btn-tool" onClick="cargar_modal('.$resultado["codbacklog"].')">';
+                        echo         '<i class="fas fa-eye"></i>';
+                        echo       '</a>';
+                        echo     '</div>';
+            
+                        echo   '</div>';
+                        echo   '<div class="card-body">';
+                        echo     '<p>';
+                        echo      $resultado["descripcion"];
+                        echo    '</p>';
+                        echo   '</div>';
+                        echo '</div>';
+                      }
+                      //
+                  }
+            ?>
+          <!--  -->
           </div>
         </div>
         <div class="card card-row card-primary" id="columna_to_do">
@@ -120,17 +105,48 @@
             </h3>
           </div>
           <div class="card-body" id="body_to_do">
-            <div class="card card-primary card-outline" id="card_5">
-              <div class="card-header">
-                <h5 class="card-title">Create first milestone</h5>
-                <div class="card-tools">
-                  <a href="#" class="btn btn-tool btn-link">#5</a>
-                  <a href="#" class="btn btn-tool">
-                    <i class="fas fa-pen"></i>
-                  </a>
-                </div>
-              </div>
-            </div>
+          <?php
+                  //
+                  $url = base_url()."index.php/backlog/c_tablero/lista_tablero"; // URL a la que hacer la petición
+                  $ch = curl_init($url); // Inicia una nueva sesión cURL
+
+                  // Configura las opciones para la transferencia cURL
+                  curl_setopt($ch, CURLOPT_POST, 1);
+                  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+                  $respuesta = curl_exec($ch); // Ejecuta la petición POST
+
+                  curl_close($ch); // Cierra la sesión cURL
+
+                  $json = json_decode($respuesta, true); // Decodifica el JSON recibido
+
+                  foreach ($json as $index => $item) {
+                      $resultado = json_decode($item["resultado"], true);
+                      if($resultado["estadohistoria"]=="todo"){
+                        echo "<script>console.log(".$resultado["codbacklog"].");</script>";
+                        //
+                        echo '<div class="card card-light card-outline" id="card_'.$resultado["codbacklog"].'">';
+                        echo  '<div class="card-header" >';
+                        echo    '<h6 class="card-title font-weight-bold" >'.$resultado["nombreproyecto"].' </h6>';
+                        echo     '<div class="card-tools">';
+                        echo       '<a><small>'.calcularTiempoTranscurrido($resultado["fecha_creacion"]).'</small></a>';
+                        echo       '<a href="#" class="btn btn-tool btn-link">#'.$resultado["codbacklog"].'</a>';
+                        echo       '<a id="modal-51969" href="#modal-container-51969" role="button" data-toggle="modal" class="btn btn-tool" onClick="cargar_modal('.$resultado["codbacklog"].')">';
+                        echo         '<i class="fas fa-eye"></i>';
+                        echo       '</a>';
+                        echo     '</div>';
+            
+                        echo   '</div>';
+                        echo   '<div class="card-body">';
+                        echo     '<p>';
+                        echo      $resultado["descripcion"];
+                        echo    '</p>';
+                        echo   '</div>';
+                        echo '</div>';
+                      }
+                      //
+                  }
+            ?>
           </div>
         </div>
         <div class="card card-row card-default" id="columna_in_progress">
@@ -140,25 +156,50 @@
             </h3>
           </div>
           <div class="card-body" id="body_in_progress">
-            <div class="card card-light card-outline" id="card_2">
-              <div class="card-header">
-                <h5 class="card-title">Update Readme</h5>
-                <div class="card-tools">
-                  <a href="#" class="btn btn-tool btn-link">#2</a>
-                  <a href="#" class="btn btn-tool">
-                    <i class="fas fa-pen"></i>
-                  </a>
-                </div>
-              </div>
-              <div class="card-body">
-                <p>
-                  Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-                  Aenean commodo ligula eget dolor. Aenean massa.
-                  Cum sociis natoque penatibus et magnis dis parturient montes,
-                  nascetur ridiculus mus.
-                </p>
-              </div>
-            </div>
+          <?php
+                  //
+                  
+                  //
+                  $url = base_url()."index.php/backlog/c_tablero/lista_tablero"; // URL a la que hacer la petición
+                  $ch = curl_init($url); // Inicia una nueva sesión cURL
+
+                  // Configura las opciones para la transferencia cURL
+                  curl_setopt($ch, CURLOPT_POST, 1);
+                  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+                  $respuesta = curl_exec($ch); // Ejecuta la petición POST
+
+                  curl_close($ch); // Cierra la sesión cURL
+
+                  $json = json_decode($respuesta, true); // Decodifica el JSON recibido
+
+                  foreach ($json as $index => $item) {
+                      $resultado = json_decode($item["resultado"], true);
+                      if($resultado["estadohistoria"]=="inprogress"){
+                        echo "<script>console.log(".$resultado["codbacklog"].");</script>";
+                        //
+                        echo '<div class="card card-light card-outline" id="card_'.$resultado["codbacklog"].'">';
+                        echo  '<div class="card-header" >';
+                        echo    '<h6 class="card-title font-weight-bold" >'.$resultado["nombreproyecto"].' </h6>';
+                        echo     '<div class="card-tools">';
+                        echo       '<a><small>'.calcularTiempoTranscurrido($resultado["fecha_creacion"]).'</small></a>';
+                        echo       '<a href="#" class="btn btn-tool btn-link">#'.$resultado["codbacklog"].'</a>';
+                        echo       '<a id="modal-51969" href="#modal-container-51969" role="button" data-toggle="modal" class="btn btn-tool" onClick="cargar_modal('.$resultado["codbacklog"].')">';
+                        echo         '<i class="fas fa-eye"></i>';
+                        echo       '</a>';
+                        echo     '</div>';
+            
+                        echo   '</div>';
+                        echo   '<div class="card-body">';
+                        echo     '<p>';
+                        echo      $resultado["descripcion"];
+                        echo    '</p>';
+                        echo   '</div>';
+                        echo '</div>';
+                      }
+                      //
+                  }
+            ?>            
           </div>
         </div>
         <div class="card card-row card-success" id="card_done">
@@ -168,29 +209,66 @@
             </h3>
           </div>
           <div class="card-body" id="body_done">
-            <div class="card card-primary card-outline"  id="card_1">
+          <div class="card card-primary card-outline"  id="card_1">
               <div class="card-header">
                 <h5 class="card-title">Create repo</h5>
                 <div class="card-tools">
                   <a href="#" class="btn btn-tool btn-link">#1</a>
-                  <a href="#" class="btn btn-tool">
+                  <a id="modal-51969" href="#modal-container-51969" role="button" data-toggle="modal" class="btn btn-tool" onClick="cargar_modal()">
                     <i class="fas fa-pen"></i>
                   </a>
                 </div>
               </div>
             </div>
+            <?php
+                  //
+                  
+                  //
+                  $url = base_url()."index.php/backlog/c_tablero/lista_tablero"; // URL a la que hacer la petición
+                  $ch = curl_init($url); // Inicia una nueva sesión cURL
+
+                  // Configura las opciones para la transferencia cURL
+                  curl_setopt($ch, CURLOPT_POST, 1);
+                  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+                  $respuesta = curl_exec($ch); // Ejecuta la petición POST
+
+                  curl_close($ch); // Cierra la sesión cURL
+
+                  $json = json_decode($respuesta, true); // Decodifica el JSON recibido
+
+                  foreach ($json as $index => $item) {
+                      $resultado = json_decode($item["resultado"], true);
+                      if($resultado["estadohistoria"]=="done"){
+                        echo "<script>console.log(".$resultado["codbacklog"].");</script>";
+                        //
+                        echo '<div class="card card-light card-outline" id="card_'.$resultado["codbacklog"].'">';
+                        echo  '<div class="card-header" >';
+                        echo    '<h6 class="card-title font-weight-bold" >'.$resultado["nombreproyecto"].' </h6>';
+                        echo     '<div class="card-tools">';
+                        echo       '<a><small>'.calcularTiempoTranscurrido($resultado["fecha_creacion"]).'</small></a>';
+                        echo       '<a href="#" class="btn btn-tool btn-link">#'.$resultado["codbacklog"].'</a>';
+                        echo       '<a id="modal-51969" href="#modal-container-51969" role="button" data-toggle="modal" class="btn btn-tool" onClick="cargar_modal('.$resultado["codbacklog"].')">';
+                        echo         '<i class="fas fa-eye"></i>';
+                        echo       '</a>';
+                        echo     '</div>';
+            
+                        echo   '</div>';
+                        echo   '<div class="card-body">';
+                        echo     '<p>';
+                        echo      $resultado["descripcion"];
+                        echo    '</p>';
+                        echo   '</div>';
+                        echo '</div>';
+                      }
+                      //
+                  }
+            ?>   
           </div>
         </div>
       </div>
     </section>
   </div>
-
-  <footer class="main-footer">
-    <div class="float-right d-none d-sm-block">
-      <b>Version</b> 3.2.0
-    </div>
-    <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
-  </footer>
 
   <!-- Control Sidebar -->
   <aside class="control-sidebar control-sidebar-dark">
@@ -224,6 +302,14 @@
         //cuando se mueve el card, regresar a la columna backlog
         var backlg = document.getElementById('body_backlog');
         backlg.appendChild(card1);  // mover la tarjeta a la columna todo
+      }
+      else{
+        //mostrar modal para llenar asignar a un usuario.
+        // Obtén una referencia al modal
+        var modal = document.getElementById('modal-container-5200');
+
+        // Utiliza la funcionalidad de Bootstrap para abrir el modal
+        $(modal).modal('show');
       }
       // mostrar un mensaje en la consola con el ID de la tarjeta y las columnas de origen y destino
       console.log("Card " + evt.item.id + " moved from column " + evt.from.id + " to column " + evt.to.id);
@@ -262,6 +348,14 @@
                 var progrs = document.getElementById('body_in_progress');
                 progrs.appendChild(card1);  // mover la tarjeta a la columna
       }
+      else{
+        //mostrar modal para llenar incidencia.
+        // Obtén una referencia al modal
+        var modal = document.getElementById('modal-container-51900');
+
+        // Utiliza la funcionalidad de Bootstrap para abrir el modal
+        $(modal).modal('show');
+      }
       console.log("Card " + evt.item.id + " moved from column " + evt.from.id + " to column " + evt.to.id);
       console.log("Old index: " + evt.oldIndex + ", New index: " + evt.newIndex);
     },
@@ -272,15 +366,136 @@
     group: 'shared',
     animation: 1000,
     onEnd: function (evt){
+      if (evt.to !== backlog) {
       //obtener el id del card que se movio
       var card1 = document.getElementById(evt.item.id);
 
       //cuando se mueve el card, regresar a la columna done
       var done1 = document.getElementById('body_done');
-      done1.appendChild(card1);  // mover la tarjeta a la columna destino
+      done1.appendChild(card1);  // mover la tarjeta a la columna destino  
+      }
       //
       console.log("Card " + evt.item.id + " moved from column " + evt.from.id + " to column " + evt.to.id);
       console.log("Old index: " + evt.oldIndex + ", New index: " + evt.newIndex);
     },
   });
 </script>
+<!-- modal maostrar card -->
+<div class="col-md-12">
+			<div class="modal fade" id="modal-container-51969" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="titulo_modal">
+							</h5> 
+							<button type="button" class="close" data-dismiss="modal">
+								<span aria-hidden="true">×</span>
+							</button>
+						</div>
+						<div class="modal-body">
+              <p id="parrafo_modal"></p>
+						</div>
+						<div class="modal-footer">
+							 
+							<button type="button" class="btn btn-primary">
+								Save changes
+							</button> 
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">
+								Close
+							</button>
+						</div>
+					</div>
+					
+				</div>
+				
+			</div>
+			
+</div>
+<script>
+  function cargar_modal( str){
+    const url = '<?= base_url() ?>index.php/backlog/c_tablero/lista_tablero'; // URL a la que hacer la petición
+
+    fetch(url, {
+        method: 'POST',
+    })
+    .then(response => response.json())
+    .then(data => {
+        data.forEach(item => {
+            const resultado = JSON.parse(item.resultado);
+            if(resultado.codbacklog==""+str){
+              //console.log("Descripcion:"+resultado.descripcion);
+              document.getElementById("titulo_modal").innerHTML = "ti";
+              document.getElementById("parrafo_modal").innerHTML = resultado.descripcion;
+            }
+        });
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        toastr.error('Ha ocurrido un error al obtener los datos.'); // Muestra un mensaje de error con toast
+    });
+  }
+</script>
+<!-- modal maostrar card -->
+<div class="col-md-12">
+			 <a id="modal-51900" href="#modal-container-51900" role="button" class="btn" data-toggle="modal">Launch demo modal</a>
+			
+			<div class="modal fade" id="modal-container-51900" role="dialog" aria-labelledby="done_modal" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="titulo_modal">
+							</h5> 
+							<button type="button" class="close" data-dismiss="modal">
+								<span aria-hidden="true">×</span>
+							</button>
+						</div>
+						<div class="modal-body">
+              <p id="parrafo_modal"></p>
+						</div>
+						<div class="modal-footer">
+							 
+							<button type="button" class="btn btn-primary">
+								Save changes
+							</button> 
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">
+								Close
+							</button>
+						</div>
+					</div>
+					
+				</div>
+				
+			</div>
+</div>
+<!-- modal asignar card -->
+<div class="col-md-12">
+			 <a id="modal-5200" href="#modal-container-5200" role="button" class="btn" data-toggle="modal">Launch demo modal</a>
+			
+			<div class="modal fade" id="modal-container-5200" role="dialog" aria-labelledby="asignar_modal" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="titulo_modal">Asignar
+							</h5> 
+							<button type="button" class="close" data-dismiss="modal">
+								<span aria-hidden="true">×</span>
+							</button>
+						</div>
+						<div class="modal-body">
+              <p id="parrafo_modal">Aqui cargar datos</p>
+						</div>
+						<div class="modal-footer">
+							 
+							<button type="button" class="btn btn-primary">
+								Save changes
+							</button> 
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">
+								Close
+							</button>
+						</div>
+					</div>
+					
+				</div>
+				
+			</div>
+</div>
