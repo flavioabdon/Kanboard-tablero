@@ -27,7 +27,13 @@ class C_inicio_sesion extends CI_Controller {
 	}
 	public function set_usuario (){
 		$usuario_post=$this->input->post('input_usuario');
-		$this->session->set_userdata("usuario_login", $usuario_post);
-		echo "Usuario logeado:".$this->session->userdata('usuario_login');
+		$idusuario_post=$this->input->post('input_idusuario');
+		$usuario_data = array(
+			'usuario_login'  => $usuario_post,
+			'id_usuario'     => $idusuario_post,
+			'logged_in' 	 => TRUE
+		);
+		$this->session->set_userdata($usuario_data);
+		echo "Usuario login:".$this->session->userdata('usuario_login'). " id_usuario:". $this->session->userdata('id_usuario');
 	}
 }

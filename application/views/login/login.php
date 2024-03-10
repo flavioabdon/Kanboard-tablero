@@ -252,7 +252,8 @@
                                     type: "POST",
                                     datatype: "json", 
                                     data:{
-                                        input_usuario : usuario_form
+                                        input_usuario : usuario_form,
+                                        input_idusuario : item.oidusuario
                                     },
                                     success: function (rsp){
                                         location.href ="<?php echo base_url(); ?>";

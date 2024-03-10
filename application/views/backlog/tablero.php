@@ -1,5 +1,4 @@
-
-  <!-- Content Wrapper. Contains page content -->
+<!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper kanban">
     <section class="content-header">
       <div class="container-fluid">
@@ -12,6 +11,11 @@
               <li class="breadcrumb-item"><a href="#">Home</a></li>
               <li class="breadcrumb-item active">Kanban Board</li>
             </ol>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <a id="modal-5300" onClick="cargar_nueva_historia()" href="#modal-container-5300" role="button" class="btn btn-primary float-sm-right" data-toggle="modal">Nueva historia</a>
           </div>
         </div>
       </div>
@@ -434,6 +438,136 @@
         toastr.error('Ha ocurrido un error al obtener los datos.'); // Muestra un mensaje de error con toast
     });
   }
+
+  function cargar_nueva_historia() {
+    const url = '<?= base_url() ?>index.php/backlog/c_tablero/lista_proyectos'; // URL a la que hacer la petición
+    $('#id_proyecto').empty();
+    $('#id_sprint').empty();
+    fetch(url, {
+        method: 'POST',
+    })
+    .then(response => response.json())
+    .then(data => {
+            $('#id_proyecto').append($('<option>', { 
+                value: "",
+                text : "" 
+            }));
+            
+        data.forEach(item => {
+            const resultado = JSON.parse(item.resultado);
+            $('#id_proyecto').append($('<option>', { 
+                value: resultado.codproyecto,
+                text : resultado.descripcion 
+            }));
+        });
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        toastr.error('Ha ocurrido un error al obtener los datos.'); // Muestra un mensaje de error con toast
+    });
+
+    // cargar sprint relacionados al proyecto
+    $(document).ready(function() {
+        $('#id_proyecto').change(function() {
+            //console.log($(this).val());
+            const url = '<?= base_url() ?>index.php/backlog/c_tablero/lista_sprints'; // URL a la que hacer la petición
+            let cod_proyecto = $(this).val();
+            fetch(url, {
+                method: 'POST',
+            })
+            .then(response => response.json())
+            .then(data => {
+                $('#id_sprint').empty();
+                data.forEach(item => {
+                    const resultado = JSON.parse(item.resultado);
+                    if(resultado.codproyecto == cod_proyecto){
+                        $('#id_sprint').append($('<option>', { 
+                            value: resultado.codsprint,
+                            text : resultado.descripcion 
+                        }));
+                    }
+                    else{
+
+                    }
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                toastr.error('Ha ocurrido un error al obtener los datos.'); // Muestra un mensaje de error con toast
+            });            
+            //
+        });
+    });
+  }
+  // cargar prioridades
+  const url = '<?= base_url() ?>index.php/backlog/c_tablero/lista_prioridades'; // URL a la que hacer la petición
+  $('#id_prioridad').empty();
+  fetch(url, {
+      method: 'POST',
+  })
+  .then(response => response.json())
+  .then(data => {
+      data.forEach(item => {
+          const resultado = JSON.parse(item.resultado);
+          $('#id_prioridad').append($('<option>', { 
+              value: resultado.codprioridad,
+              text : resultado.valorprioridad 
+          }));
+      });
+  })
+  .catch(error => {
+      console.error('Error:', error);
+      toastr.error('Ha ocurrido un error al obtener los datos.'); // Muestra un mensaje de error con toast
+  });
+  // Funcion guardar nueva historia
+  function guardar_historia() {
+      console.log("guardar");
+      let f_id_sprint   = $('#id_sprint').val();
+      let f_fecha       = $('#fecha').val();
+      let f_hora        = $('#hora').val();
+      let f_id_prioridad= $('#id_prioridad').val();
+      let f_tiempo_estimado= $('#tiempo_estimado').val();
+      let f_descripcion = $('#descripcion').val();
+      console.log(":"+f_id_sprint+":"+f_fecha+":"+f_hora+":"+f_id_prioridad+":"+f_tiempo_estimado+":"+f_descripcion);
+
+      // Hacer la petición POST con jQuery AJAX
+      $.ajax({
+          url: "<?= base_url() ?>index.php/backlog/c_tablero/nueva_historia",
+          type: "POST",
+          datatype: "json",
+          data: {
+            e_id_sprint: f_id_sprint,
+            e_fecha: f_fecha,
+            e_hora: f_hora,
+            e_id_prioridad: f_id_prioridad,
+            e_tiempo_estimado: f_tiempo_estimado,
+            e_descripcion: f_descripcion
+          },
+          success: function(response) {
+            //console.log(response);
+            // parseando response
+            var json = JSON.parse(response);
+            let innerData = JSON.parse(json[0].fn_nueva_historia);
+            console.log(innerData.estado)
+             if (innerData.estado === "exitoso") {
+                $('#modal-container-5300').modal('hide');
+                 toastr.success('Se insertó correctamente.');
+                 location.href ="<?= base_url() ?>index.php/tablero";
+
+             } else if (innerData.estado === "error") {
+                 toastr.error('Ha ocurrido un error al insertar los datos.'+innerData.mensaje);
+             }
+          },
+          error: function(error) {
+            console.log("error");
+              console.error('Error:', error);
+              toastr.error('Ha ocurrido un error al hacer la petición.');
+          }
+      });
+  }
+  function cancelar_historia(){
+    console.log("cancelar");
+  }
 </script>
 <!-- modal maostrar card -->
 <div class="col-md-12">
@@ -499,3 +633,115 @@
 				
 			</div>
 </div>
+
+<!-- modal nueva historia -->
+<div class="col-md-12">		
+			<div class="modal fade" id="modal-container-5300" role="dialog" aria-labelledby="nuevahistoria_modal" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="titulo_modal">Nueva Historia
+							</h5> 
+							<button type="button" class="close" data-dismiss="modal">
+								<span aria-hidden="true">×</span>
+							</button>
+						</div>
+						<div class="modal-body">
+              <!--  -->
+              <div class="row">
+              <div class="col-md-6">
+                  <div class="form-group floating-label col-xs-12">
+                    <label for="Proyecto">Proyecto</label>
+                    <select class="form-control select-list" id="id_proyecto" name="id_proyecto" required>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group floating-label col-xs-12">
+                    <label for="Sprint">Sprint</label>
+                    <select class="form-control select-list" id="id_sprint" name="id_sprint" required>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <!--  -->
+              <div class="row">
+                <div class="col-md-6">
+                  <!-- Fecha -->
+                  <div class="form-group">
+                    <label for="fecha">Fecha</label>
+                    <input type="text" class="form-control" id="fecha">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <!-- Hora -->
+                  <div class="form-group">
+                    <label for="hora">Hora</label>
+                    <input type="text" class="form-control" id="hora" value="23:59">
+                  </div>
+                </div>
+              </div>
+              <!--  -->
+              <!--  -->
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group floating-label col-xs-12">
+                    <label for="Proyecto">Prioridad</label>
+                    <select class="form-control select-list" id="id_prioridad" name="id_prioridad" required>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="tiempo_estimado">Tiempo Estimado Hrs.</label>
+                    <input type="text" class="form-control" id="tiempo_estimado" value="00:00">
+                  </div>
+                </div>
+              </div>
+              <!--  -->
+              <div class="row">
+                <div class="col-md-12">
+                  <label for="descripcion">
+                  Descripción
+                  </label>
+                  <textarea rows= "2" class="form-control" id="descripcion"></textarea>
+                </div>
+              </div>
+              <!--  -->
+						</div>
+						<div class="modal-footer">
+							 
+							<button type="button" onClick="guardar_historia()" class="btn btn-primary">
+								Guardar
+							</button> 
+							<button type="button" onClick="cancelar_historia()" class="btn btn-secondary" data-dismiss="modal">
+								Cancelar
+							</button>
+						</div>
+					</div>
+					
+				</div>
+				
+			</div>
+</div>
+<script type="text/javascript">
+  flatpickr("#fecha", {
+    enableTime: false,
+    dateFormat: "d-m-Y",
+  });
+
+  flatpickr("#hora", {
+    enableTime: true,
+    noCalendar: true,
+    time_24hr: true,
+    dateFormat: "H:i",
+  });
+
+  flatpickr("#tiempo_estimado", {
+    enableTime: true,
+    noCalendar: true,
+    time_24hr: true,
+    defaultDate: "00:00",
+    dateFormat: "H:i",
+  });
+</script>
