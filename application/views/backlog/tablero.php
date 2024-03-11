@@ -34,9 +34,10 @@
           <?php
                   //
                   function calcularTiempoTranscurrido($fechaPasada) {
+                    // Crear objetos DateTime
                     $fechaPasada = new DateTime($fechaPasada);
                     $fechaActual = new DateTime();
-                
+
                     $intervalo = $fechaPasada->diff($fechaActual);
                 
                     $anos = $intervalo->y;
@@ -75,13 +76,22 @@
                   foreach ($json as $index => $item) {
                       $resultado = json_decode($item["resultado"], true);
                       if($resultado["estadohistoria"]=="backlog"){
-                        echo "<script>console.log(".$resultado["codbacklog"].");</script>";
+                        $color = "";
+                        if($resultado["valorprioridad"]=="Alta"){
+                          $color = "card-danger ";
+                        }
+                        elseif($resultado["valorprioridad"]=="Media"){
+                          $color = "card-warning";
+                        }
+                        else{
+                          $color = "card-success";
+                        }
                         //
-                        echo '<div class="card card-light card-outline" id="card_'.$resultado["codbacklog"].'">';
+                        echo '<div class="card '.$color.'  card-outline" id="'.$resultado["codbacklog"].'">';
                         echo  '<div class="card-header" >';
-                        echo    '<h6 class="card-title font-weight-bold" >'.$resultado["nombreproyecto"].' </h6>';
+                        echo    '<p class="card-title" ><small class="font-weight-bold">'.$resultado["identificador"].'</small></p>';
                         echo     '<div class="card-tools">';
-                        echo       '<a><small>'.calcularTiempoTranscurrido($resultado["fecha_creacion"]).'</small></a>';
+                        echo       '<a><small class="text-muted">'.calcularTiempoTranscurrido($resultado["fecha_creacion"]).'</small></a>';
                         echo       '<a href="#" class="btn btn-tool btn-link">#'.$resultado["codbacklog"].'</a>';
                         echo       '<a id="modal-51969" href="#modal-container-51969" role="button" data-toggle="modal" class="btn btn-tool" onClick="cargar_modal('.$resultado["codbacklog"].')">';
                         echo         '<i class="fas fa-eye"></i>';
@@ -90,9 +100,10 @@
             
                         echo   '</div>';
                         echo   '<div class="card-body">';
-                        echo     '<p>';
-                        echo      $resultado["descripcion"];
-                        echo    '</p>';
+                        echo     '<p class="small"><b> Descripción:</b>'.$resultado["hdescripcion"].'</p>';
+                        echo     '<p class="small"><b> Creado:</b>'.$resultado["nombre_asignado_por"].'</p>';
+                        echo     '<p class="small"><b> Asignado a:</b>'.$resultado["nombre_asignado_a"].'</p>';
+                        echo     '<p class="small"><b> Prioridad:</b>'.$resultado["valorprioridad"].'</p>';
                         echo   '</div>';
                         echo '</div>';
                       }
@@ -127,13 +138,22 @@
                   foreach ($json as $index => $item) {
                       $resultado = json_decode($item["resultado"], true);
                       if($resultado["estadohistoria"]=="todo"){
-                        echo "<script>console.log(".$resultado["codbacklog"].");</script>";
+                        $color = "";
+                        if($resultado["valorprioridad"]=="Alta"){
+                          $color = "card-danger ";
+                        }
+                        elseif($resultado["valorprioridad"]=="Media"){
+                          $color = "card-warning";
+                        }
+                        else{
+                          $color = "card-success";
+                        }
                         //
-                        echo '<div class="card card-light card-outline" id="card_'.$resultado["codbacklog"].'">';
+                        echo '<div class="card '.$color.'  card-outline" id="'.$resultado["codbacklog"].'">';
                         echo  '<div class="card-header" >';
-                        echo    '<h6 class="card-title font-weight-bold" >'.$resultado["nombreproyecto"].' </h6>';
+                        echo    '<p class="card-title" ><small class="font-weight-bold">'.$resultado["identificador"].'</small></p>';
                         echo     '<div class="card-tools">';
-                        echo       '<a><small>'.calcularTiempoTranscurrido($resultado["fecha_creacion"]).'</small></a>';
+                        echo       '<a><small class="text-muted">'.calcularTiempoTranscurrido($resultado["fecha_creacion"]).'</small></a>';
                         echo       '<a href="#" class="btn btn-tool btn-link">#'.$resultado["codbacklog"].'</a>';
                         echo       '<a id="modal-51969" href="#modal-container-51969" role="button" data-toggle="modal" class="btn btn-tool" onClick="cargar_modal('.$resultado["codbacklog"].')">';
                         echo         '<i class="fas fa-eye"></i>';
@@ -142,9 +162,10 @@
             
                         echo   '</div>';
                         echo   '<div class="card-body">';
-                        echo     '<p>';
-                        echo      $resultado["descripcion"];
-                        echo    '</p>';
+                        echo     '<p class="small"><b> Descripción:</b>'.$resultado["hdescripcion"].'</p>';
+                        echo     '<p class="small"><b> Creado:</b>'.$resultado["nombre_asignado_por"].'</p>';
+                        echo     '<p class="small"><b> Asignado a:</b>'.$resultado["nombre_asignado_a"].'</p>';
+                        echo     '<p class="small"><b> Prioridad:</b>'.$resultado["valorprioridad"].'</p>';
                         echo   '</div>';
                         echo '</div>';
                       }
@@ -180,13 +201,22 @@
                   foreach ($json as $index => $item) {
                       $resultado = json_decode($item["resultado"], true);
                       if($resultado["estadohistoria"]=="inprogress"){
-                        echo "<script>console.log(".$resultado["codbacklog"].");</script>";
+                        $color = "";
+                        if($resultado["valorprioridad"]=="Alta"){
+                          $color = "card-danger ";
+                        }
+                        elseif($resultado["valorprioridad"]=="Media"){
+                          $color = "card-warning";
+                        }
+                        else{
+                          $color = "card-success";
+                        }
                         //
-                        echo '<div class="card card-light card-outline" id="card_'.$resultado["codbacklog"].'">';
+                        echo '<div class="card '.$color.'  card-outline" id="'.$resultado["codbacklog"].'">';
                         echo  '<div class="card-header" >';
-                        echo    '<h6 class="card-title font-weight-bold" >'.$resultado["nombreproyecto"].' </h6>';
+                        echo    '<p class="card-title" ><small class="font-weight-bold">'.$resultado["identificador"].'</small></p>';
                         echo     '<div class="card-tools">';
-                        echo       '<a><small>'.calcularTiempoTranscurrido($resultado["fecha_creacion"]).'</small></a>';
+                        echo       '<a><small class="text-muted">'.calcularTiempoTranscurrido($resultado["fecha_creacion"]).'</small></a>';
                         echo       '<a href="#" class="btn btn-tool btn-link">#'.$resultado["codbacklog"].'</a>';
                         echo       '<a id="modal-51969" href="#modal-container-51969" role="button" data-toggle="modal" class="btn btn-tool" onClick="cargar_modal('.$resultado["codbacklog"].')">';
                         echo         '<i class="fas fa-eye"></i>';
@@ -195,9 +225,10 @@
             
                         echo   '</div>';
                         echo   '<div class="card-body">';
-                        echo     '<p>';
-                        echo      $resultado["descripcion"];
-                        echo    '</p>';
+                        echo     '<p class="small"><b> Descripción:</b>'.$resultado["hdescripcion"].'</p>';
+                        echo     '<p class="small"><b> Creado:</b>'.$resultado["nombre_asignado_por"].'</p>';
+                        echo     '<p class="small"><b> Asignado a:</b>'.$resultado["nombre_asignado_a"].'</p>';
+                        echo     '<p class="small"><b> Prioridad:</b>'.$resultado["valorprioridad"].'</p>';
                         echo   '</div>';
                         echo '</div>';
                       }
@@ -213,17 +244,6 @@
             </h3>
           </div>
           <div class="card-body" id="body_done">
-          <div class="card card-primary card-outline"  id="card_1">
-              <div class="card-header">
-                <h5 class="card-title">Create repo</h5>
-                <div class="card-tools">
-                  <a href="#" class="btn btn-tool btn-link">#1</a>
-                  <a id="modal-51969" href="#modal-container-51969" role="button" data-toggle="modal" class="btn btn-tool" onClick="cargar_modal()">
-                    <i class="fas fa-pen"></i>
-                  </a>
-                </div>
-              </div>
-            </div>
             <?php
                   //
                   
@@ -244,13 +264,22 @@
                   foreach ($json as $index => $item) {
                       $resultado = json_decode($item["resultado"], true);
                       if($resultado["estadohistoria"]=="done"){
-                        echo "<script>console.log(".$resultado["codbacklog"].");</script>";
+                        $color = "";
+                        if($resultado["valorprioridad"]=="Alta"){
+                          $color = "card-danger ";
+                        }
+                        elseif($resultado["valorprioridad"]=="Media"){
+                          $color = "card-warning";
+                        }
+                        else{
+                          $color = "card-success";
+                        }
                         //
-                        echo '<div class="card card-light card-outline" id="card_'.$resultado["codbacklog"].'">';
+                        echo '<div class="card '.$color.'  card-outline" id="'.$resultado["codbacklog"].'">';
                         echo  '<div class="card-header" >';
-                        echo    '<h6 class="card-title font-weight-bold" >'.$resultado["nombreproyecto"].' </h6>';
+                        echo    '<p class="card-title" ><small class="font-weight-bold">'.$resultado["identificador"].'</small></p>';
                         echo     '<div class="card-tools">';
-                        echo       '<a><small>'.calcularTiempoTranscurrido($resultado["fecha_creacion"]).'</small></a>';
+                        echo       '<a><small class="text-muted">'.calcularTiempoTranscurrido($resultado["fecha_creacion"]).'</small></a>';
                         echo       '<a href="#" class="btn btn-tool btn-link">#'.$resultado["codbacklog"].'</a>';
                         echo       '<a id="modal-51969" href="#modal-container-51969" role="button" data-toggle="modal" class="btn btn-tool" onClick="cargar_modal('.$resultado["codbacklog"].')">';
                         echo         '<i class="fas fa-eye"></i>';
@@ -259,9 +288,10 @@
             
                         echo   '</div>';
                         echo   '<div class="card-body">';
-                        echo     '<p>';
-                        echo      $resultado["descripcion"];
-                        echo    '</p>';
+                        echo     '<p class="small"><b> Descripción:</b>'.$resultado["hdescripcion"].'</p>';
+                        echo     '<p class="small"><b> Creado:</b>'.$resultado["nombre_asignado_por"].'</p>';
+                        echo     '<p class="small"><b> Asignado a:</b>'.$resultado["nombre_asignado_a"].'</p>';
+                        echo     '<p class="small"><b> Prioridad:</b>'.$resultado["valorprioridad"].'</p>';
                         echo   '</div>';
                         echo '</div>';
                       }
@@ -308,16 +338,11 @@
         backlg.appendChild(card1);  // mover la tarjeta a la columna todo
       }
       else{
-        //mostrar modal para llenar asignar a un usuario.
-        // Obtén una referencia al modal
-        var modal = document.getElementById('modal-container-5200');
-
-        // Utiliza la funcionalidad de Bootstrap para abrir el modal
-        $(modal).modal('show');
+        asignar_historia(evt.item.id);
       }
-      // mostrar un mensaje en la consola con el ID de la tarjeta y las columnas de origen y destino
-      console.log("Card " + evt.item.id + " moved from column " + evt.from.id + " to column " + evt.to.id);
-      console.log("Old index: " + evt.oldIndex + ", New index: " + evt.newIndex);
+       //mostrar un mensaje en la consola con el ID de la tarjeta y las columnas de origen y destino
+      //  console.log("Card " + evt.item.id + " moved from column " + evt.from.id + " to column " + evt.to.id);
+      //  console.log("Old index: " + evt.oldIndex + ", New index: " + evt.newIndex);
     },
   });
 
@@ -334,8 +359,11 @@
         var todo1 = document.getElementById('body_to_do');
         todo1.appendChild(card1);  // mover la tarjeta a la columna todo
       }
-      console.log("Card " + evt.item.id + " moved from column " + evt.from.id + " to column " + evt.to.id);
-      console.log("Old index: " + evt.oldIndex + ", New index: " + evt.newIndex);
+      else{
+        mover_todo_inprogress(evt.item.id);
+      }
+      // console.log("Card " + evt.item.id + " moved from column " + evt.from.id + " to column " + evt.to.id);
+      // console.log("Old index: " + evt.oldIndex + ", New index: " + evt.newIndex);
     },
   });
 
@@ -353,15 +381,10 @@
                 progrs.appendChild(card1);  // mover la tarjeta a la columna
       }
       else{
-        //mostrar modal para llenar incidencia.
-        // Obtén una referencia al modal
-        var modal = document.getElementById('modal-container-51900');
-
-        // Utiliza la funcionalidad de Bootstrap para abrir el modal
-        $(modal).modal('show');
+        mover_inprogress_done(evt.item.id);
       }
-      console.log("Card " + evt.item.id + " moved from column " + evt.from.id + " to column " + evt.to.id);
-      console.log("Old index: " + evt.oldIndex + ", New index: " + evt.newIndex);
+      // console.log("Card " + evt.item.id + " moved from column " + evt.from.id + " to column " + evt.to.id);
+      // console.log("Old index: " + evt.oldIndex + ", New index: " + evt.newIndex);
     },
   });
 
@@ -378,9 +401,12 @@
       var done1 = document.getElementById('body_done');
       done1.appendChild(card1);  // mover la tarjeta a la columna destino  
       }
+      else{
+        mover_done_backlog(evt.item.id);
+      }
       //
-      console.log("Card " + evt.item.id + " moved from column " + evt.from.id + " to column " + evt.to.id);
-      console.log("Old index: " + evt.oldIndex + ", New index: " + evt.newIndex);
+      // console.log("Card " + evt.item.id + " moved from column " + evt.from.id + " to column " + evt.to.id);
+      // console.log("Old index: " + evt.oldIndex + ", New index: " + evt.newIndex);
     },
   });
 </script>
@@ -468,6 +494,7 @@
 
     // cargar sprint relacionados al proyecto
     $(document).ready(function() {
+      toastr.options.timeOut = 10000;
         $('#id_proyecto').change(function() {
             //console.log($(this).val());
             const url = '<?= base_url() ?>index.php/backlog/c_tablero/lista_sprints'; // URL a la que hacer la petición
@@ -521,14 +548,13 @@
   });
   // Funcion guardar nueva historia
   function guardar_historia() {
-      console.log("guardar");
       let f_id_sprint   = $('#id_sprint').val();
       let f_fecha       = $('#fecha').val();
       let f_hora        = $('#hora').val();
       let f_id_prioridad= $('#id_prioridad').val();
       let f_tiempo_estimado= $('#tiempo_estimado').val();
       let f_descripcion = $('#descripcion').val();
-      console.log(":"+f_id_sprint+":"+f_fecha+":"+f_hora+":"+f_id_prioridad+":"+f_tiempo_estimado+":"+f_descripcion);
+      // console.log(":"+f_id_sprint+":"+f_fecha+":"+f_hora+":"+f_id_prioridad+":"+f_tiempo_estimado+":"+f_descripcion);
 
       // Hacer la petición POST con jQuery AJAX
       $.ajax({
@@ -548,7 +574,7 @@
             // parseando response
             var json = JSON.parse(response);
             let innerData = JSON.parse(json[0].fn_nueva_historia);
-            console.log(innerData.estado)
+            // console.log(innerData.estado)
              if (innerData.estado === "exitoso") {
                 $('#modal-container-5300').modal('hide');
                  toastr.success('Se insertó correctamente.');
@@ -566,33 +592,240 @@
       });
   }
   function cancelar_historia(){
-    console.log("cancelar");
+    $(this).find('#modal-container-5300').trigger('reset');
+  }
+
+  function asignar_historia(idbacklog){
+    $('#id_backlog').text(idbacklog);
+    var modal = document.getElementById('modal-container-5200');
+    // Utiliza la funcionalidad de Bootstrap para abrir el modal
+    $(modal).modal('show');
+    // Cargar los usuarios
+    const url = '<?= base_url() ?>index.php/backlog/c_tablero/lista_usuarios'; // URL a la que hacer la petición
+    $('#id_usuario').empty();
+    fetch(url, {
+        method: 'POST',
+    })
+    .then(response => response.json())
+    .then(data => {
+            $('#id_usuario').append($('<option>', { 
+                value: "",
+                text : "" 
+            }));
+            
+        data.forEach(item => {
+            const resultado = JSON.parse(item.resultado);
+            $('#id_usuario').append($('<option>', { 
+                value: resultado.codusu,
+                text : resultado.nombre + " " +resultado.apellido 
+            }));
+        });
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        toastr.error('Ha ocurrido un error al obtener los datos.'); // Muestra un mensaje de error con toast
+    });
+      // fin cargar
+      return idbacklog;
+  }
+  function asignar_guardar(){
+      let f_id_backlog   = $('#id_backlog').text();;
+      let f_id_usuario   = $('#id_usuario').val();
+      console.log("."+f_id_backlog+"  :"+f_id_usuario);
+      // Hacer la petición POST con jQuery AJAX
+      $.ajax({
+          url: "<?= base_url() ?>index.php/backlog/c_tablero/asignar_historia",
+          type: "POST",
+          datatype: "json",
+          data: {
+            e_id_backlog: f_id_backlog,
+            e_id_usuario: f_id_usuario
+          },
+          success: function(response) {
+            console.log(response);
+            // parseando response
+            var json = JSON.parse(response);
+            let innerData = JSON.parse(json[0].fn_asignar_historia);
+            // console.log(innerData.estado)
+             if (innerData.estado === "exitoso") {
+                $('#modal-container-5200').modal('hide');
+                 toastr.success('Se insertó correctamente.');
+                 location.href ="<?= base_url() ?>index.php/tablero";
+
+             } else if (innerData.estado === "error") {
+                 toastr.error('Ha ocurrido un error al insertar los datos.'+innerData.mensaje);
+             }
+          },
+          error: function(error) {
+            console.log("error");
+              console.error('Error:', error);
+              toastr.error('Ha ocurrido un error al hacer la petición.');
+          }
+      });
+  }
+  function asignar_cancelar(){
+        //obtener el id del card que se movio
+        var card1 = document.getElementById($('#id_backlog').text());
+
+        //cuando se mueve el card, regresar a la columna todoQ
+        var todo1 = document.getElementById('body_backlog');
+        todo1.appendChild(card1);  // mover la tarjeta a la columna todo
+  }
+  function mover_todo_inprogress(idbacklog){
+      let f_id_backlog   = idbacklog
+      console.log("."+f_id_backlog);
+      // Hacer la petición POST con jQuery AJAX
+      $.ajax({
+          url: "<?= base_url() ?>index.php/backlog/c_tablero/mover_todo_a_inprogress",
+          type: "POST",
+          datatype: "json",
+          data: {
+            e_id_backlog: f_id_backlog
+          },
+          success: function(response) {
+            console.log(response);
+            // parseando response
+            var json = JSON.parse(response);
+            let innerData = JSON.parse(json[0].fn_mover_todo_a_inprogress);
+            // console.log(innerData.estado)
+             if (innerData.estado === "exitoso") {
+                 toastr.success('Se insertó correctamente.');
+                 location.href ="<?= base_url() ?>index.php/tablero";
+
+             } else if (innerData.estado === "error") {
+                 toastr.error('Ha ocurrido un error al insertar los datos.'+innerData.mensaje);
+             }
+          },
+          error: function(error) {
+            console.log("error");
+              console.error('Error:', error);
+              toastr.error('Ha ocurrido un error al hacer la petición.');
+          }
+      });
+  }
+
+  function mover_inprogress_done(idbacklog){
+      var modal = document.getElementById('modal-container-51900');
+      $(modal).modal('show');
+      //
+      $('#id_backlog1').text(idbacklog);
+  }
+  function done_guardar(){
+      let f_id_backlog   = $('#id_backlog1').text();;
+      let f_solucion   = $('#solucion').val();
+      let f_incidencia   = $('#incidencia').val();
+      console.log("."+f_id_backlog+"  :"+f_solucion+":"+f_incidencia);
+      // Hacer la petición POST con jQuery AJAX
+      $.ajax({
+          url: "<?= base_url() ?>index.php/backlog/c_tablero/mover_inprogress_done",
+          type: "POST",
+          datatype: "json",
+          data: {
+            e_id_backlog: f_id_backlog,
+            e_solucion:   f_solucion,
+            e_incidencia: f_incidencia
+          },
+          success: function(response) {
+            console.log(response);
+            // parseando response
+            var json = JSON.parse(response);
+            let innerData = JSON.parse(json[0].fn_mover_inprogress_done);
+            // console.log(innerData.estado)
+             if (innerData.estado === "exitoso") {
+                $('#modal-container-51900').modal('hide');
+                 toastr.success('Se insertó correctamente.');
+                 location.href ="<?= base_url() ?>index.php/tablero";
+
+             } else if (innerData.estado === "error") {
+                 toastr.error('Ha ocurrido un error al insertar los datos.'+innerData.mensaje);
+             }
+          },
+          error: function(error) {
+            console.log("error");
+              console.error('Error:', error);
+              toastr.error('Ha ocurrido un error al hacer la petición.');
+          }
+      });
+  }
+  function done_cancelar(){
+      //obtener el id del card que se movio
+      var card1 = document.getElementById($('#id_backlog1').text());
+
+      //cuando se mueve el card, regresar a la columna todoQ
+      var todo1 = document.getElementById('body_in_progress');
+      todo1.appendChild(card1);  // mover la tarjeta a la columna todo
+  }
+  function mover_done_backlog(idbacklog){
+    let f_id_backlog   = idbacklog
+      console.log("."+f_id_backlog);
+      // Hacer la petición POST con jQuery AJAX
+      $.ajax({
+          url: "<?= base_url() ?>index.php/backlog/c_tablero/mover_done_backlog",
+          type: "POST",
+          datatype: "json",
+          data: {
+            e_id_backlog: f_id_backlog
+          },
+          success: function(response) {
+            console.log(response);
+            // parseando response
+            var json = JSON.parse(response);
+            let innerData = JSON.parse(json[0].fn_mover_done_backlog);
+            // console.log(innerData.estado)
+             if (innerData.estado === "exitoso") {
+                 toastr.success('Se insertó correctamente.');
+                 location.href ="<?= base_url() ?>index.php/tablero";
+
+             } else if (innerData.estado === "error") {
+                 toastr.error('Ha ocurrido un error al insertar los datos.'+innerData.mensaje);
+             }
+          },
+          error: function(error) {
+            console.log("error");
+              console.error('Error:', error);
+              toastr.error('Ha ocurrido un error al hacer la petición.');
+          }
+      });
   }
 </script>
 <!-- modal maostrar card -->
 <div class="col-md-12">
-			 <a id="modal-51900" href="#modal-container-51900" role="button" class="btn" data-toggle="modal">Launch demo modal</a>
-			
 			<div class="modal fade" id="modal-container-51900" role="dialog" aria-labelledby="done_modal" aria-hidden="true">
 				<div class="modal-dialog" role="document">
 					<div class="modal-content">
 						<div class="modal-header">
 							<h5 class="modal-title" id="titulo_modal">
+                Finalizar
 							</h5> 
 							<button type="button" class="close" data-dismiss="modal">
 								<span aria-hidden="true">×</span>
 							</button>
 						</div>
 						<div class="modal-body">
-              <p id="parrafo_modal"></p>
+              <div class="row">
+                  <div class="col-md-12">
+                    <label for="solucion">
+                    Solución
+                    </label>
+                    <textarea rows= "5" class="form-control" id="solucion"></textarea>
+                  </div>
+              </div>
+              <div class="row">
+                  <div class="col-md-12">
+                    <label for="incidencia">
+                    Incidencia
+                    </label>
+                    <textarea rows= "5" class="form-control" id="incidencia"></textarea>
+                  </div>
+              </div>
 						</div>
 						<div class="modal-footer">
-							 
-							<button type="button" class="btn btn-primary">
-								Save changes
+							 <h1 id="id_backlog1"></h1>
+							<button type="button" onClick="done_guardar()" class="btn btn-primary">
+								Guardar
 							</button> 
-							<button type="button" class="btn btn-secondary" data-dismiss="modal">
-								Close
+							<button type="button" onClick="done_cancelar()" class="btn btn-secondary" data-dismiss="modal">
+								cancelar
 							</button>
 						</div>
 					</div>
@@ -603,8 +836,6 @@
 </div>
 <!-- modal asignar card -->
 <div class="col-md-12">
-			 <a id="modal-5200" href="#modal-container-5200" role="button" class="btn" data-toggle="modal">Launch demo modal</a>
-			
 			<div class="modal fade" id="modal-container-5200" role="dialog" aria-labelledby="asignar_modal" aria-hidden="true">
 				<div class="modal-dialog" role="document">
 					<div class="modal-content">
@@ -616,15 +847,23 @@
 							</button>
 						</div>
 						<div class="modal-body">
-              <p id="parrafo_modal">Aqui cargar datos</p>
+              <!--  -->
+              <div class="row">
+                  <div class="form-group floating-label col-xs-12">
+                    <label for="Usuario"></label>
+                    <select class="form-control select-list" id="id_usuario" name="id_usuario" required>
+                    </select>
+                  </div>
+                  <h2 id="id_backlog" name="id_backlog"></h2>
+              </div>
 						</div>
 						<div class="modal-footer">
 							 
-							<button type="button" class="btn btn-primary">
-								Save changes
+							<button type="button" onClick="asignar_guardar()" class="btn btn-primary">
+								Asignar
 							</button> 
-							<button type="button" class="btn btn-secondary" data-dismiss="modal">
-								Close
+							<button type="button" onClick="asignar_cancelar()" class="btn btn-secondary" data-dismiss="modal">
+								Cancelar
 							</button>
 						</div>
 					</div>

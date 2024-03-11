@@ -43,28 +43,30 @@ class C_tablero extends CI_Controller {
 		echo json_encode($json);
     }
 	public function asignar_historia(){
-		$codbacklog  = $this->input->post('codbacklog');
-		$asignadoa = $this->input->post('asignadoa');
-		$creadopor = $this->session->userdata('id_usuario');
-        $json = $this->tablero->asignar_historia($codbacklog,$asignadoa,$creadopor);
+		$codbacklog  		= $this->input->post('e_id_backlog');
+		$asignadoa 			= $this->input->post('e_id_usuario');
+		$creadopor 			= $this->session->userdata('id_usuario');
+        $json 				= $this->tablero->asignar_historia($codbacklog,$asignadoa,$creadopor);
 		echo json_encode($json);
     }
 	public function mover_todo_a_inprogress(){
-		$codbacklog  = $this->input->post('codbacklog');
-		$creadopor = $this->session->userdata('id_usuario');
-        $json = $this->tablero->mover_todo_a_inprogress($codbacklog,$creadopor);
+		$codbacklog  		= $this->input->post('e_id_backlog');
+		$creadopor 			= $this->session->userdata('id_usuario');
+        $json 				= $this->tablero->mover_todo_a_inprogress($codbacklog,$creadopor);
 		echo json_encode($json);
     }
 	public function mover_inprogress_done(){
-		$codbacklog  = $this->input->post('codbacklog');
-		$creadopor = $this->session->userdata('id_usuario');
-        $json = $this->tablero->mover_inprogress_done($codbacklog,$creadopor);
+		$codbacklog  		= $this->input->post('e_id_backlog');
+		$solucion  			=$this->input->post('e_solucion');
+		$incidencia  		= $this->input->post('e_incidencia');
+		$creadopor 			= $this->session->userdata('id_usuario');
+        $json = $this->tablero->mover_inprogress_done($codbacklog,$creadopor,$solucion,$incidencia);
 		echo json_encode($json);
     }
 	public function mover_done_backlog(){
-		$codbacklog  = $this->input->post('codbacklog');
-		$creadopor = $this->session->userdata('id_usuario');
-        $json = $this->tablero->mover_done_backlog($codbacklog,$creadopor);
+		$codbacklog  		= $this->input->post('e_id_backlog');
+		$creadopor 			= $this->session->userdata('id_usuario');
+        $json 				= $this->tablero->mover_done_backlog($codbacklog,$creadopor);
 		echo json_encode($json);
     }
 	public function lista_proyectos(){
@@ -77,6 +79,10 @@ class C_tablero extends CI_Controller {
     }
 	public function lista_prioridades(){
         $json = $this->tablero->listar_prioridades();
+		echo json_encode($json);
+    }
+	public function lista_usuarios(){
+        $json = $this->tablero->listar_usuarios();
 		echo json_encode($json);
     }
 }

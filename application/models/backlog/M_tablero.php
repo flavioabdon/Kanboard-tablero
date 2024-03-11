@@ -12,23 +12,22 @@ class M_tablero extends CI_Model {
         return $query->result();
     }
     public function nueva_historia($codsprint,$fecha,$hora,$codprioridad,$tiempoestimado,$descripcion,$creadopor) {
-        //$query = $this->db->query("SELECT * FROM  SELECT fn_nueva_historia('$codsprint', '$fecha','$hora', '$codprioridad', '$tiempoestimado', '$descripcion', '$creadopor');");
         $query = $this->db->query("SELECT fn_nueva_historia($codsprint,  '$fecha','$hora', $codprioridad, '$tiempoestimado', '$descripcion', $creadopor);");
         return $query->result();
     }
-    public function asignar_historia() {
+    public function asignar_historia($codbacklog,$codasignadoa,$creadopor) {
         $query = $this->db->query("SELECT fn_asignar_historia('$codbacklog', '$codasignadoa','$creadopor');");
         return $query->result();
     }
-    public function mover_todo_a_inprogress() {
-        $query = $this->db->query("SELECT fn_mover_todo_a_inprogress('$codbacklog', '$creadorpor');");
+    public function mover_todo_a_inprogress($codbacklog,$creadopor) {
+        $query = $this->db->query("SELECT fn_mover_todo_a_inprogress('$codbacklog', '$creadopor');");
         return $query->result();
     }
-    public function mover_inprogress_done() {
+    public function mover_inprogress_done($codbacklog,$creadopor,$solucion,$incidencia) {
         $query = $this->db->query("SELECT fn_mover_inprogress_done('$codbacklog', '$creadopor','$solucion','$incidencia');");
         return $query->result();
     }
-    public function mover_done_backlog() {
+    public function mover_done_backlog($codbacklog,$creadopor) {
         $query = $this->db->query("SELECT fn_mover_done_backlog('$codbacklog','$creadopor');");
         return $query->result();
     }
@@ -42,6 +41,10 @@ class M_tablero extends CI_Model {
     }
     public function listar_prioridades() {
         $query = $this->db->query("SELECT * FROM fn_listar_prioridad();");
+        return $query->result();
+    }
+    public function listar_usuarios() {
+        $query = $this->db->query("SELECT * FROM fn_listar_usuario();");
         return $query->result();
     }
 }
