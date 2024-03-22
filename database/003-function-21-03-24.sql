@@ -774,25 +774,36 @@ $$ LANGUAGE plpgsql;
 ------------------------------------------------------------------------
 -- Eliminar: documento
 -- Funcion
-CREATE OR REPLACE FUNCTION fn_eliminar_documento(
-    p_codDocumento INTEGER, 
+CREATE OR REPLACE FUNCTION fn_eliminar_historia(
+    p_codbacklog INTEGER, 
     p_modificado_por INTEGER)
 RETURNS JSON AS $$
 DECLARE
     result JSON;
+    v_codhistoria INTEGER;
 BEGIN
     BEGIN
-        UPDATE Documento 
+	    SELECT b.codhistoria INTO v_codhistoria FROM backlog b WHERE b.codbacklog = p_codbacklog;
+	    
+        UPDATE backlog  
         SET 
-            estado_registro = 'eliminado',
+            estado_registro = 'inactivo',
             modificado_por = p_modificado_por,
             fecha_modificacion = CURRENT_TIMESTAMP
         WHERE 
-            codDocumento = p_codDocumento;
+            codbacklog  = p_codbacklog;
+           
+        UPDATE historia
+        SET 
+            estado_registro = 'inactivo',
+            modificado_por = p_modificado_por,
+            fecha_modificacion = CURRENT_TIMESTAMP
+        WHERE 
+            codHistoria = v_codhistoria;
         IF FOUND THEN
             result := '{"estado": "exitoso", "mensaje": "null"}';
         ELSE
-            result := '{"estado": "error", "mensaje": "No se encontr�� el Documento para eliminar"}';
+            result := '{"estado": "error", "mensaje": "No se encontró la Historia para eliminar"}';
         END IF;
     EXCEPTION WHEN others THEN
         result := json_build_object('estado', 'error', 'mensaje', SQLERRM);
@@ -805,22 +816,71 @@ $$ LANGUAGE plpgsql;
 -- -- Llamada a funcion
 -- SELECT fn_eliminar_documento(1, 1);
 ------------------------------------------------------------------------
--- Eliminar: historia
-CREATE OR REPLACE FUNCTION fn_eliminar_historia(
-    p_codHistoria INTEGER, 
+CREATE OR REPLACE FUNCTION fn_historia_revisada(
+    p_codbacklog INTEGER, 
     p_modificado_por INTEGER)
 RETURNS JSON AS $$
 DECLARE
     result JSON;
+    v_codhistoria INTEGER;
 BEGIN
     BEGIN
-        UPDATE Historia 
+	    SELECT b.codhistoria INTO v_codhistoria FROM backlog b WHERE b.codbacklog = p_codbacklog;
+	    
+        UPDATE backlog  
+        SET 
+            estado_registro = 'inactivo',
+            codusuario_revision = p_modificado_por,
+            modificado_por = p_modificado_por,
+            fecha_modificacion = CURRENT_TIMESTAMP
+        WHERE 
+            codbacklog  = p_codbacklog;
+           
+        UPDATE historia
+        SET 
+            estado_registro = 'inactivo',
+            modificado_por = p_modificado_por,
+            fecha_modificacion = CURRENT_TIMESTAMP
+        WHERE 
+            codHistoria = v_codhistoria;
+        IF FOUND THEN
+            result := '{"estado": "exitoso", "mensaje": "null"}';
+        ELSE
+            result := '{"estado": "error", "mensaje": "No se encontró la Historia para eliminar"}';
+        END IF;
+    EXCEPTION WHEN others THEN
+        result := json_build_object('estado', 'error', 'mensaje', SQLERRM);
+    END;
+    RETURN result;
+END;
+$$ LANGUAGE plpgsql;
+-- SELECT fn_historia_revisada(11, 3);
+------------------------------------------------------------------------
+-- Eliminar: historia
+CREATE OR REPLACE FUNCTION fn_eliminar_historia(
+    p_codBacklog INTEGER, 
+    p_modificado_por INTEGER)
+RETURNS JSON AS $$
+DECLARE
+    result JSON;
+   v_codHistoria INTEGER;
+BEGIN
+    BEGIN
+	    SELECT b.codhistoria INTO v_codHistoria FROM backlog b WHERE b.codbacklog =p_codBacklog ;
+       UPDATE backlog
         SET 
             estado_registro = 'eliminado',
             modificado_por = p_modificado_por,
             fecha_modificacion = CURRENT_TIMESTAMP
         WHERE 
-            codHistoria = p_codHistoria;
+            codbacklog = p_codBacklog; 
+	   UPDATE Historia 
+        SET 
+            estado_registro = 'eliminado',
+            modificado_por = p_modificado_por,
+            fecha_modificacion = CURRENT_TIMESTAMP
+        WHERE 
+            codHistoria = v_codHistoria;
         IF FOUND THEN
             result := '{"estado": "exitoso", "mensaje": "null"}';
         ELSE
