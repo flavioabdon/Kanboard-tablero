@@ -24,7 +24,7 @@ class Inicial extends CI_Controller {
 	 */
 	public function index()
 	{
-		$this->layout->view('inicial/inicio');
-		// $this->layout->view('kanboard/tablero');
+		// $this->layout->view('inicial/inicio');
+		$this->layout->view('backlog/tablero');
 	}
 }

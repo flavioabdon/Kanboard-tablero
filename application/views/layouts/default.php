@@ -941,6 +941,8 @@
                                     }
     });
   }
+
+  document.getElementById("check-colapsed").click();
 </script>
 </body>
 </html>

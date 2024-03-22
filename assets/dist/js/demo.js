@@ -8,15 +8,15 @@
 /* eslint-disable camelcase */
 
 (function ($) {
-  'use strict'
+  // 'use strict'
 
-  setTimeout(function () {
-    if (window.___browserSync___ === undefined && Number(localStorage.getItem('AdminLTE:Demo:MessageShowed')) < Date.now()) {
-      localStorage.setItem('AdminLTE:Demo:MessageShowed', (Date.now()) + (15 * 60 * 1000))
-      // eslint-disable-next-line no-alert
-      alert('You load AdminLTE\'s "demo.js", \nthis file is only created for testing purposes!')
-    }
-  }, 1000)
+  // setTimeout(function () {
+  //   if (window.___browserSync___ === undefined && Number(localStorage.getItem('AdminLTE:Demo:MessageShowed')) < Date.now()) {
+  //     localStorage.setItem('AdminLTE:Demo:MessageShowed', (Date.now()) + (15 * 60 * 1000))
+  //     // eslint-disable-next-line no-alert
+  //     alert('You load AdminLTE\'s "demo.js", \nthis file is only created for testing purposes!')
+  //   }
+  // }, 1000)
 
   function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1)
@@ -129,6 +129,7 @@
   var $sidebar_collapsed_checkbox = $('<input />', {
     type: 'checkbox',
     value: 1,
+    id:'check-colapsed',
     checked: $('body').hasClass('sidebar-collapse'),
     class: 'mr-1'
   }).on('click', function () {
@@ -140,9 +141,9 @@
       $(window).trigger('resize')
     }
   })
-  var $sidebar_collapsed_container = $('<div />', { class: 'mb-1' }).append($sidebar_collapsed_checkbox).append('<span>Collapsed</span>')
+  var $sidebar_collapsed_container = $('<div />', {class: 'mb-1' }).append($sidebar_collapsed_checkbox).append('<span>Collapsed</span>')
   $container.append($sidebar_collapsed_container)
-
+  $sidebar_collapsed_container.attr('id', 'collapsed_chk');
   $(document).on('collapsed.lte.pushmenu', '[data-widget="pushmenu"]', function () {
     $sidebar_collapsed_checkbox.prop('checked', true)
   })

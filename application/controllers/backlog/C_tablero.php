@@ -44,9 +44,10 @@ class C_tablero extends CI_Controller {
     }
 	public function asignar_historia(){
 		$codbacklog  		= $this->input->post('e_id_backlog');
+		$tiempoestimado		= $this->input->post('e_tiempo_estimado');
 		$asignadoa 			= $this->input->post('e_id_usuario');
 		$creadopor 			= $this->session->userdata('id_usuario');
-        $json 				= $this->tablero->asignar_historia($codbacklog,$asignadoa,$creadopor);
+        $json 				= $this->tablero->asignar_historia($codbacklog,$tiempoestimado,$asignadoa,$creadopor);
 		echo json_encode($json);
     }
 	public function mover_todo_a_inprogress(){
@@ -60,6 +61,7 @@ class C_tablero extends CI_Controller {
 		$solucion  			=$this->input->post('e_solucion');
 		$incidencia  		= $this->input->post('e_incidencia');
 		$creadopor 			= $this->session->userdata('id_usuario');
+		$json_bonificacion = $this->tablero->guardar_bonificacion($codbacklog);
         $json = $this->tablero->mover_inprogress_done($codbacklog,$creadopor,$solucion,$incidencia);
 		echo json_encode($json);
     }
@@ -85,4 +87,34 @@ class C_tablero extends CI_Controller {
         $json = $this->tablero->listar_usuarios();
 		echo json_encode($json);
     }
+	public function eliminar_historia(){
+		$codbacklog  		= $this->input->post('e_id_backlog');
+		$modificadopor 			= $this->session->userdata('id_usuario');
+        $json 				= $this->tablero->eliminar_historia($codbacklog,$modificadopor);
+		echo json_encode($json);
+    }
+	public function historia_revisada(){
+		$codbacklog  		= $this->input->post('e_id_backlog');
+		$modificadopor 			= $this->session->userdata('id_usuario');
+        $json 				= $this->tablero->historia_revisada($codbacklog,$modificadopor);
+		echo json_encode($json);
+    }
+	public function upload_file() {
+		$config['upload_path']          = './uploads'; // Cambia esto a la ruta de tu carpeta de carga
+		$config['allowed_types']        = 'gif|jpg|png'; // Cambia esto a los tipos de archivos que quieras permitir
+		$config['max_size']             = 10000; // Cambia esto al tamaño máximo de archivo que quieras permitir (en KB)
+	
+		$this->load->library('upload', $config);
+	
+		if ( ! $this->upload->do_upload('archivo')) { // 'archivo' debe coincidir con el nombre del campo de entrada de archivo
+			$error = array('error' => $this->upload->display_errors());
+	
+			// manejar el error de carga aquí
+		}
+		else {
+			$data = array('upload_data' => $this->upload->data());
+			echo $config['upload_path'] ;
+			// el archivo se cargó con éxito, puedes acceder a la información del archivo cargado a través de $data['upload_data']
+		}
+	}
 }

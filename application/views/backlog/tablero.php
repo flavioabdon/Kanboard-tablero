@@ -22,7 +22,7 @@
     </section>
 
     <section class="content pb-3">
-      <div class="container-fluid h-100">
+      <div class="container-fluid h-50">
         <div class="card card-row card-secondary" id="columna_backlog">
           <div class="card-header" id="header_backlog">
             <h3 class="card-title">
@@ -96,14 +96,16 @@
                         echo       '<a id="modal-51969" href="#modal-container-51969" role="button" data-toggle="modal" class="btn btn-tool" onClick="cargar_modal('.$resultado["codbacklog"].')">';
                         echo         '<i class="fas fa-eye"></i>';
                         echo       '</a>';
+                        echo       '<a role="button"  class="btn btn-tool" onClick="eliminar_historia('.$resultado["codbacklog"].')">';
+                        echo         '<i class="fas fa-trash"></i>';
+                        echo       '</a>';
                         echo     '</div>';
             
                         echo   '</div>';
                         echo   '<div class="card-body">';
-                        echo     '<p class="small"><b> Descripción:</b>'.$resultado["hdescripcion"].'</p>';
                         echo     '<p class="small"><b> Creado:</b>'.$resultado["nombre_asignado_por"].'</p>';
-                        echo     '<p class="small"><b> Asignado a:</b>'.$resultado["nombre_asignado_a"].'</p>';
-                        echo     '<p class="small"><b> Prioridad:</b>'.$resultado["valorprioridad"].'</p>';
+                        echo     '<p class="small"><b> Prioridad:</b>'.$resultado["valorprioridad"]." (".$resultado["bonificacion"].' Pts.) <b>Duración:</b>'.$resultado["tiempoestimado"].'Hrs.</p>';
+                        echo     '<p class="small"><b> Descripción:</b>'.$resultado["hdescripcion"].'</p>';  
                         echo   '</div>';
                         echo '</div>';
                       }
@@ -122,19 +124,7 @@
           <div class="card-body" id="body_to_do">
           <?php
                   //
-                  $url = base_url()."index.php/backlog/c_tablero/lista_tablero"; // URL a la que hacer la petición
-                  $ch = curl_init($url); // Inicia una nueva sesión cURL
-
-                  // Configura las opciones para la transferencia cURL
-                  curl_setopt($ch, CURLOPT_POST, 1);
-                  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-                  $respuesta = curl_exec($ch); // Ejecuta la petición POST
-
-                  curl_close($ch); // Cierra la sesión cURL
-
-                  $json = json_decode($respuesta, true); // Decodifica el JSON recibido
-
+                  
                   foreach ($json as $index => $item) {
                       $resultado = json_decode($item["resultado"], true);
                       if($resultado["estadohistoria"]=="todo"){
@@ -158,14 +148,16 @@
                         echo       '<a id="modal-51969" href="#modal-container-51969" role="button" data-toggle="modal" class="btn btn-tool" onClick="cargar_modal('.$resultado["codbacklog"].')">';
                         echo         '<i class="fas fa-eye"></i>';
                         echo       '</a>';
+                        echo       '<a role="button"  class="btn btn-tool" onClick="eliminar_historia('.$resultado["codbacklog"].')">';
+                        echo         '<i class="fas fa-trash"></i>';
+                        echo       '</a>';
                         echo     '</div>';
             
                         echo   '</div>';
                         echo   '<div class="card-body">';
+                        echo     '<p class="small"><b> Creado:</b>'.$resultado["nombre_asignado_por"].' <b>&nbsp&nbsp&nbsp&nbspAsignado a </b>'.$resultado["nombre_asignado_a"].'</p>';
+                        echo     '<p class="small"><b> Prioridad:</b>'.$resultado["valorprioridad"]." (".$resultado["bonificacion"].' Pts.) <b>Duración:</b>'.$resultado["tiempoestimado"].'Hrs.</p>';
                         echo     '<p class="small"><b> Descripción:</b>'.$resultado["hdescripcion"].'</p>';
-                        echo     '<p class="small"><b> Creado:</b>'.$resultado["nombre_asignado_por"].'</p>';
-                        echo     '<p class="small"><b> Asignado a:</b>'.$resultado["nombre_asignado_a"].'</p>';
-                        echo     '<p class="small"><b> Prioridad:</b>'.$resultado["valorprioridad"].'</p>';
                         echo   '</div>';
                         echo '</div>';
                       }
@@ -185,19 +177,7 @@
                   //
                   
                   //
-                  $url = base_url()."index.php/backlog/c_tablero/lista_tablero"; // URL a la que hacer la petición
-                  $ch = curl_init($url); // Inicia una nueva sesión cURL
-
-                  // Configura las opciones para la transferencia cURL
-                  curl_setopt($ch, CURLOPT_POST, 1);
-                  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-                  $respuesta = curl_exec($ch); // Ejecuta la petición POST
-
-                  curl_close($ch); // Cierra la sesión cURL
-
-                  $json = json_decode($respuesta, true); // Decodifica el JSON recibido
-
+                  
                   foreach ($json as $index => $item) {
                       $resultado = json_decode($item["resultado"], true);
                       if($resultado["estadohistoria"]=="inprogress"){
@@ -221,14 +201,17 @@
                         echo       '<a id="modal-51969" href="#modal-container-51969" role="button" data-toggle="modal" class="btn btn-tool" onClick="cargar_modal('.$resultado["codbacklog"].')">';
                         echo         '<i class="fas fa-eye"></i>';
                         echo       '</a>';
+                        echo       '<a role="button"  class="btn btn-tool" onClick="eliminar_historia('.$resultado["codbacklog"].')">';
+                        echo         '<i class="fas fa-trash"></i>';
+                        echo       '</a>';
                         echo     '</div>';
             
                         echo   '</div>';
                         echo   '<div class="card-body">';
+                        echo     '<p class="small"><b> Creado:</b>'.$resultado["nombre_asignado_por"].' <b>&nbsp&nbsp&nbsp&nbspAsignado a </b>'.$resultado["nombre_asignado_a"].'</p>';
+                        echo     '<p class="small"><b> Prioridad:</b>'.$resultado["valorprioridad"]." (".$resultado["bonificacion"].' Pts.) <b>Duración:</b>'.$resultado["tiempoestimado"].'Hrs.</p>';
+                        echo     '<p class="small"><b> Tiempo Restante:</b>'.$resultado["tiempo_restante"].'</p>';
                         echo     '<p class="small"><b> Descripción:</b>'.$resultado["hdescripcion"].'</p>';
-                        echo     '<p class="small"><b> Creado:</b>'.$resultado["nombre_asignado_por"].'</p>';
-                        echo     '<p class="small"><b> Asignado a:</b>'.$resultado["nombre_asignado_a"].'</p>';
-                        echo     '<p class="small"><b> Prioridad:</b>'.$resultado["valorprioridad"].'</p>';
                         echo   '</div>';
                         echo '</div>';
                       }
@@ -248,19 +231,7 @@
                   //
                   
                   //
-                  $url = base_url()."index.php/backlog/c_tablero/lista_tablero"; // URL a la que hacer la petición
-                  $ch = curl_init($url); // Inicia una nueva sesión cURL
-
-                  // Configura las opciones para la transferencia cURL
-                  curl_setopt($ch, CURLOPT_POST, 1);
-                  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-                  $respuesta = curl_exec($ch); // Ejecuta la petición POST
-
-                  curl_close($ch); // Cierra la sesión cURL
-
-                  $json = json_decode($respuesta, true); // Decodifica el JSON recibido
-
+                  
                   foreach ($json as $index => $item) {
                       $resultado = json_decode($item["resultado"], true);
                       if($resultado["estadohistoria"]=="done"){
@@ -281,17 +252,25 @@
                         echo     '<div class="card-tools">';
                         echo       '<a><small class="text-muted">'.calcularTiempoTranscurrido($resultado["fecha_creacion"]).'</small></a>';
                         echo       '<a href="#" class="btn btn-tool btn-link">#'.$resultado["codbacklog"].'</a>';
-                        echo       '<a id="modal-51969" href="#modal-container-51969" role="button" data-toggle="modal" class="btn btn-tool" onClick="cargar_modal('.$resultado["codbacklog"].')">';
-                        echo         '<i class="fas fa-eye"></i>';
+                        // echo       '<a id="modal-51969" href="#modal-container-51969" role="button" data-toggle="modal" class="btn btn-tool" onClick="cargar_modal('.$resultado["codbacklog"].')">';
+                        // echo         '<i class="fas fa-eye"></i>';
+                        // echo       '</a>';
+                        echo       '<a role="button"  class="btn btn-tool" onClick="eliminar_historia('.$resultado["codbacklog"].')">';
+                        echo         '<i class="fas fa-trash"></i>';
+                        echo       '</a>';
+                        echo       '<a role="button"  class="btn btn-tool" onClick="historia_revisada('.$resultado["codbacklog"].')">';
+                        echo         '<i class="fas fa-check"></i>';
                         echo       '</a>';
                         echo     '</div>';
             
                         echo   '</div>';
                         echo   '<div class="card-body">';
+                        echo     '<p class="small"><b> Creado:</b>'.$resultado["nombre_asignado_por"].' <b>&nbsp&nbsp&nbsp&nbspAsignado a </b>'.$resultado["nombre_asignado_a"].'</p>';
+                        echo     '<p class="small"><b> Prioridad:</b>'.$resultado["valorprioridad"]." (".$resultado["bonificacion"].' Pts.) <b>Duración:</b>'.$resultado["tiempoestimado"].'Hrs.</p>';
+                        echo     '<p class="small"><b> Bonificación:</b>'.$resultado["bonificacion_final"].' Pts.</p>';
                         echo     '<p class="small"><b> Descripción:</b>'.$resultado["hdescripcion"].'</p>';
-                        echo     '<p class="small"><b> Creado:</b>'.$resultado["nombre_asignado_por"].'</p>';
-                        echo     '<p class="small"><b> Asignado a:</b>'.$resultado["nombre_asignado_a"].'</p>';
-                        echo     '<p class="small"><b> Prioridad:</b>'.$resultado["valorprioridad"].'</p>';
+                        echo     '<p class="small"><b> Solución:</b>'.$resultado["descripcionsolucion"].'</p>';
+                        echo     '<p class="small"><b> Incidencia:</b>'.$resultado["descripcionincidencia"].'</p>';
                         echo   '</div>';
                         echo '</div>';
                       }
@@ -494,6 +473,7 @@
 
     // cargar sprint relacionados al proyecto
     $(document).ready(function() {
+    //
       toastr.options.timeOut = 10000;
         $('#id_proyecto').change(function() {
             //console.log($(this).val());
@@ -587,9 +567,10 @@
           error: function(error) {
             console.log("error");
               console.error('Error:', error);
-              toastr.error('Ha ocurrido un error al hacer la petición.');
+              //toastr.error('Ha ocurrido un error al hacer la petición.');
           }
       });
+
   }
   function cancelar_historia(){
     $(this).find('#modal-container-5300').trigger('reset');
@@ -625,12 +606,97 @@
         console.error('Error:', error);
         toastr.error('Ha ocurrido un error al obtener los datos.'); // Muestra un mensaje de error con toast
     });
+    //cargarhoraguardada
+    const url2 = '<?= base_url() ?>index.php/backlog/c_tablero/lista_tablero'; // URL a la que hacer la petición
+    fetch(url2, {
+        method: 'POST',
+    })
+    .then(response => response.json())
+    .then(data => {
+            
+        data.forEach(item => {
+            const resultado = JSON.parse(item.resultado);
+            if(resultado.codbacklog == idbacklog){
+              $('#tiempo_estimado1').val(resultado.tiempoestimado);
+            }
+        });
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        toastr.error('Ha ocurrido un error al obtener los datos.'); // Muestra un mensaje de error con toast
+    });
       // fin cargar
       return idbacklog;
   }
+  function eliminar_historia(idbacklog){
+    let f_id_backlog   = idbacklog
+      console.log("."+f_id_backlog);
+      // Hacer la petición POST con jQuery AJAX
+      $.ajax({
+          url: "<?= base_url() ?>index.php/backlog/c_tablero/eliminar_historia",
+          type: "POST",
+          datatype: "json",
+          data: {
+            e_id_backlog: f_id_backlog
+          },
+          success: function(response) {
+            console.log(response);
+            // parseando response
+            var json = JSON.parse(response);
+            let innerData = JSON.parse(json[0].fn_eliminar_historia);
+            // console.log(innerData.estado)
+             if (innerData.estado === "exitoso") {
+                 toastr.success('Se insertó correctamente.');
+                 location.href ="<?= base_url() ?>index.php/tablero";
+
+             } else if (innerData.estado === "error") {
+                 toastr.error('Ha ocurrido un error al insertar los datos.'+innerData.mensaje);
+             }
+          },
+          error: function(error) {
+            console.log("error");
+              console.error('Error:', error);
+              toastr.error('Ha ocurrido un error al hacer la petición.');
+          }
+      });
+  }
+  function historia_revisada(idbacklog){
+    let f_id_backlog   = idbacklog
+      console.log("."+f_id_backlog);
+      // Hacer la petición POST con jQuery AJAX
+      $.ajax({
+          url: "<?= base_url() ?>index.php/backlog/c_tablero/historia_revisada",
+          type: "POST",
+          datatype: "json",
+          data: {
+            e_id_backlog: f_id_backlog
+          },
+          success: function(response) {
+            console.log(response);
+            // parseando response
+            var json = JSON.parse(response);
+            let innerData = JSON.parse(json[0].fn_historia_revisada);
+            // console.log(innerData.estado)
+             if (innerData.estado === "exitoso") {
+                 toastr.success('Se insertó correctamente.');
+                 location.href ="<?= base_url() ?>index.php/tablero";
+
+             } else if (innerData.estado === "error") {
+                 toastr.error('Ha ocurrido un error al insertar los datos.'+innerData.mensaje);
+             }
+          },
+          error: function(error) {
+            console.log("error");
+              console.error('Error:', error);
+              toastr.error('Ha ocurrido un error al hacer la petición.');
+          }
+      });
+
+  }
   function asignar_guardar(){
-      let f_id_backlog   = $('#id_backlog').text();;
+      let f_id_backlog   = $('#id_backlog').text();
       let f_id_usuario   = $('#id_usuario').val();
+      let f_tiempo_estimado= $('#tiempo_estimado1').val();
       console.log("."+f_id_backlog+"  :"+f_id_usuario);
       // Hacer la petición POST con jQuery AJAX
       $.ajax({
@@ -639,6 +705,7 @@
           datatype: "json",
           data: {
             e_id_backlog: f_id_backlog,
+            e_tiempo_estimado: f_tiempo_estimado,
             e_id_usuario: f_id_usuario
           },
           success: function(response) {
@@ -788,7 +855,7 @@
       });
   }
 </script>
-<!-- modal maostrar card -->
+<!-- modal finalizar card -->
 <div class="col-md-12">
 			<div class="modal fade" id="modal-container-51900" role="dialog" aria-labelledby="done_modal" aria-hidden="true">
 				<div class="modal-dialog" role="document">
@@ -820,7 +887,7 @@
               </div>
 						</div>
 						<div class="modal-footer">
-							 <h1 id="id_backlog1"></h1>
+							 <h1 id="id_backlog1" class="d-none"></h1>
 							<button type="button" onClick="done_guardar()" class="btn btn-primary">
 								Guardar
 							</button> 
@@ -849,14 +916,18 @@
 						<div class="modal-body">
               <!--  -->
               <div class="row">
-                  <div class="form-group floating-label col-xs-12">
-                    <label for="Usuario"></label>
+                  <div class="form-group floating-label col-md-12">
+                    <label for="Usuario">Asignar a</label>
                     <select class="form-control select-list" id="id_usuario" name="id_usuario" required>
                     </select>
                   </div>
-                  <h2 id="id_backlog" name="id_backlog"></h2>
+                  <h2 id="id_backlog" class="d-none" name="id_backlog"></h2>
+
+  
+                  <label for="tiempo_estimado1">Tiempo Estimado Hrs.</label>
+                  <input type="text" class="form-control" id="tiempo_estimado1" value="01:00">
               </div>
-						</div>
+            </div>
 						<div class="modal-footer">
 							 
 							<button type="button" onClick="asignar_guardar()" class="btn btn-primary">
@@ -980,7 +1051,17 @@
     enableTime: true,
     noCalendar: true,
     time_24hr: true,
-    defaultDate: "00:00",
+    defaultDate: "01:00",
     dateFormat: "H:i",
   });
+  flatpickr("#tiempo_estimado1", {
+    enableTime: true,
+    noCalendar: true,
+    time_24hr: true,
+    defaultDate: "01:00",
+    dateFormat: "H:i",
+  });
+  setTimeout(function(){
+    location.reload();
+  }, 63000);
 </script>
