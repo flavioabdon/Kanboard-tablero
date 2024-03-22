@@ -530,6 +530,10 @@
   function guardar_historia() {
       let f_id_sprint   = $('#id_sprint').val();
       let f_fecha       = $('#fecha').val();
+      let parts = f_fecha.split('-');
+      let date = new Date(parts[2], parts[1] - 1, parts[0]);
+      f_fecha = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2);
+      
       let f_hora        = $('#hora').val();
       let f_id_prioridad= $('#id_prioridad').val();
       let f_tiempo_estimado= $('#tiempo_estimado').val();
