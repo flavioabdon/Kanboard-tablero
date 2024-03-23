@@ -23,8 +23,22 @@ class C_tablero extends CI_Controller {
 	 * @see https://codeigniter.com/userguide3/general/urls.html
 	 */
 	public function index()
-	{
-		$this->layout->view('backlog/tablero');
+	{	
+		$idusu 			= $this->session->userdata('id_usuario');
+        $json = $this->tablero->obtener_usuario_y_rol($idusu);
+
+		$json = json_encode($json);
+		$datos = json_decode($json, true);		
+		$resultado = $datos[0]['resultado'];
+		$datosResultado = json_decode($resultado, true);
+		$rol = $datosResultado['nombrerol'];
+		if($rol =='Administrador' or $rol == 'Responsable'){
+			$this->layout->view('backlog/tablero');
+		}
+		else{
+			$this->layout->view('backlog/tablero_usuario');
+		}
+		
 	}
 	public function lista_tablero(){
         $json = $this->tablero->listar_tablero();

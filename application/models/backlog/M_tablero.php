@@ -7,6 +7,10 @@ Descripcion:
 
 class M_tablero extends CI_Model {
     
+    public function obtener_usuario_y_rol($codusuario) {
+        $query = $this->db->query("SELECT * FROM  fn_obtener_usuario_y_rol ($codusuario);");
+        return $query->result();
+    }
     public function listar_tablero() {
         $query = $this->db->query("SELECT * FROM  fn_listar_tablero();");
         return $query->result();
