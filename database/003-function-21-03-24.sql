@@ -1435,82 +1435,7 @@ $$ LANGUAGE plpgsql;
 -----------------------------------------------------------------------------------------------------
 -- mover todo a inprogress
 -- funcion
---
-CREATE OR REPLACE FUNCTION fn_mover_todo_a_inprogress(
-    -- tabla backlog
-	p_codbacklog INTEGER,
-    p_creado_por INTEGER
-    )
-RETURNS JSON AS $$
-DECLARE
-   	result JSON;
-   	v_codhistoria INTEGER;
-   	v_asignado_a INTEGER;
-  	v_codusuario_asignado_por INTEGER;
-BEGIN
-    BEGIN
-       IF exists (SELECT * FROM backlog b WHERE b.codbacklog =p_codbacklog  AND  b.estado_registro = 'activo')
-	       THEN
-	       		SELECT b.codusuario_asignado_a  INTO v_asignado_a 
-		    	FROM backlog b 
-		    	WHERE b.codbacklog  = p_codbacklog AND  estado_registro = 'activo';
-	       		
-		       SELECT b.codhistoria INTO v_codhistoria  
-		    	FROM backlog b 
-		    	WHERE b.codbacklog  = p_codbacklog AND  estado_registro = 'activo';
-		    
-		    	SELECT b.codusuario_asignado_por  INTO v_codusuario_asignado_por 
-		    	FROM backlog b 
-		    	WHERE b.codbacklog  = p_codbacklog  AND  estado_registro = 'activo';
-		    
-		    	UPDATE backlog 
-		    	SET estado_registro  = 'inactivo'
-		    	WHERE 
-		    		codBacklog = p_codBacklog;
-		    
-		        INSERT INTO Backlog (
-	            codHistoria,
-	            codUsuario_asignado_por,
-	            codUsuario_asignado_a,
-	            estadoHistoria,
-	            estado_registro,
-	            creado_por,
-	            fecha_creacion
-	        ) 
-	        VALUES (
-	            v_codhistoria, 
-	            v_codusuario_asignado_por, 
-	            v_asignado_a , 
-	            'inprogress',
-	            'activo', 
-	            p_creado_por,
-	            CURRENT_TIMESTAMP
-	        );
-	       result := '{"estado": "exitoso", "mensaje": "null"}';
-       ELSE
-       		result := '{"estado": "error", "mensaje": "Elimiado de to do"}';
-      END IF;
-    EXCEPTION WHEN others THEN
-        result := json_build_object('estado', 'error', 'mensaje', SQLERRM);
-    END;
-    RETURN result;
-END;
-$$ LANGUAGE plpgsql;
--- -- consulta ayuda
--- SELECT * FROM calendario c ;
--- SELECT * FROM backlog b ;
--- SELECT * FROM historia h ;
--- SELECT * FROM  usuario u ;
--- SELECT * FROM prioridad p ;
--- SELECT * FROM proyecto p ;
--- -- llamada a la funcion
--- SELECT fn_mover_todo_a_inprogress(9, 1);
------------------------------------------------------------------------------------------------------
-------------------------------------------------------------------------------------------------------
--------------------------------------------------------------------------------------------------------
--- mover  inprogress a done
--- funcion
---
+-- Solo puede mover el usuario al que ha sido asignado o tambien el administrador
 CREATE OR REPLACE FUNCTION fn_mover_inprogress_done(
     -- tabla backlog
 	p_codbacklog INTEGER,
@@ -1526,7 +1451,28 @@ DECLARE
   	v_codusuario_asignado_por INTEGER;
 BEGIN
     BEGIN
-       IF exists (SELECT * FROM backlog b WHERE b.codbacklog =p_codbacklog  AND  b.estado_registro = 'activo')
+       IF  (
+                SELECT EXISTS (
+                SELECT * 
+                FROM backlog b 
+                WHERE b.codbacklog = p_codbacklog
+                AND b.estado_registro = 'activo'
+            )
+            AND (
+                EXISTS (
+                    SELECT * 
+                    FROM backlog b2 
+                    WHERE b2.codusuario_asignado_a = p_creado_por  AND b2.codbacklog = p_codbacklog
+                ) 
+                OR 
+                EXISTS (
+                    SELECT * FROM usuario u 
+                    JOIN usuario_rol ur ON ur.codusuario = u.codusu 
+                    JOIN rol r ON r.codrol = ur.codrol 
+                    WHERE r.nombrerol = 'Administrador' AND u.codusu = p_creado_por 
+                )
+            )
+       	)
 	       THEN
 	       	    SELECT b.codusuario_asignado_a  INTO v_asignado_a 
 		    	FROM backlog b 
@@ -1575,7 +1521,7 @@ BEGIN
 	          
 	       result := '{"estado": "exitoso", "mensaje": "null"}';
        ELSE
-       		result := '{"estado": "error", "mensaje": "Elimiado de in progress"}';
+       		result := '{"estado": "error", "mensaje": "No tiene permiso ó eliminado de in progress"}';
       END IF;
     EXCEPTION WHEN others THEN
         result := json_build_object('estado', 'error', 'mensaje', SQLERRM);
@@ -1609,7 +1555,28 @@ DECLARE
   	v_codusuario_asignado_por INTEGER;
 BEGIN
     BEGIN
-       IF exists (SELECT * FROM backlog b WHERE b.codbacklog =p_codbacklog  AND  b.estado_registro = 'activo')
+       IF  (
+                SELECT EXISTS (
+                SELECT * 
+                FROM backlog b 
+                WHERE b.codbacklog = p_codbacklog
+                AND b.estado_registro = 'activo'
+            )
+            AND (
+                EXISTS (
+                    SELECT * 
+                    FROM backlog b2 
+                    WHERE b2.codusuario_asignado_a = p_creado_por  AND b2.codbacklog = p_codbacklog
+                ) 
+                OR 
+                EXISTS (
+                    SELECT * FROM usuario u 
+                    JOIN usuario_rol ur ON ur.codusuario = u.codusu 
+                    JOIN rol r ON r.codrol = ur.codrol 
+                    WHERE r.nombrerol = 'Administrador' AND u.codusu = p_creado_por 
+                )
+            )
+       	)
 	       THEN
 	       	    SELECT b.codusuario_asignado_a  INTO v_asignado_a 
 		    	FROM backlog b 
@@ -1648,7 +1615,7 @@ BEGIN
 	        );
 	       result := '{"estado": "exitoso", "mensaje": "null"}';
        ELSE
-       		result := '{"estado": "error", "mensaje": "Eliminado de done"}';
+       		result := '{"estado": "error", "mensaje": "No tiene permiso ó Eliminado de done"}';
       END IF;
     EXCEPTION WHEN others THEN
         result := json_build_object('estado', 'error', 'mensaje', SQLERRM);
@@ -1945,3 +1912,77 @@ COST 100;
 -- NIVEL ADMINISTRADOR
 -- Ver el tablero con los nombres de las personas que estan trabajando
 
+------------------------------------------------------------------------------
+-- listar json tablero
+-- funcion
+CREATE OR REPLACE FUNCTION fn_listar_tablero_por_usuario(p_codusuario INTEGER)
+RETURNS TABLE(
+    resultado JSON
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT row_to_json(t)
+    FROM (
+        SELECT b.codbacklog  ,
+        pr.nombreproyecto ,
+        b.estadohistoria ,
+        ((fn_calcular_tiempo_restante(b.codbacklog)::json) ->> 'mensaje')::interval AS tiempo_restante,
+        h.bonificacion_final  ,
+        b.codhistoria , 
+        h.descripcionsolucion,
+        h.descripcionincidencia ,
+        p.bonificacion,
+        h.descripcion AS hdescripcion, 
+        p.codprioridad  ,
+		b.codusuario_asignado_por ,
+		h.tiempoestimado ,
+		h.identificador , 
+		pr.descripcion ,
+		sp.nombresprint ,
+		p.valorprioridad ,
+		u.nombre AS nombre_asignado_por,
+		b.codusuario_asignado_a ,
+		u2.nombre AS nombre_asignado_a,
+		b.codusuario_revision ,
+		u3.nombre AS nombre_revisado,
+		b.creado_por ,
+		u4.nombre AS creado_por,
+		b.fecha_creacion,
+        CURRENT_TIMESTAMP  as fecha_servidor
+		FROM backlog b JOIN historia h ON b.codhistoria  = h.codhistoria
+		JOIN  prioridad p ON p.codprioridad = h.codprioridad 
+		JOIN usuario u ON u.codusu = b.codusuario_asignado_por 
+		LEFT JOIN usuario u2 ON b.codusuario_asignado_a = u2.codusu  
+		LEFT JOIN usuario u3 ON u3.codusu = b.codusuario_revision 
+		LEFT JOIN usuario u4 ON u4.codusu = b.creado_por 
+		JOIN sprint sp ON sp.codsprint =h.codsprint 
+		JOIN proyecto pr ON pr.codproyecto = sp.codproyecto 
+		WHERE b.estado_registro = 'activo' AND b.codusuario_asignado_a = p_codusuario
+		ORDER BY b.codbacklog DESC 
+    ) t;
+EXCEPTION WHEN others THEN
+    RETURN QUERY SELECT json_build_object('estado', 'error', 'mensaje', SQLERRM);
+END;
+$$ LANGUAGE plpgsql;
+-- -- llamada a la funcion
+-- SELECT * FROM  fn_listar_tablero_por_usuario(3);
+------------------------------------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION fn_obtener_usuario_y_rol(p_codusuario INTEGER)
+RETURNS TABLE(
+    resultado JSON
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT row_to_json(t)
+    FROM (
+        SELECT u.nombre, u.apellido, u.nombreusuario, r.nombrerol  FROM usuario u
+        JOIN usuario_rol ur ON u.codusu  = ur.codusuario
+		JOIN rol r ON r.codrol = ur.codrol 	
+        WHERE codusu = p_codusuario
+    ) t;
+EXCEPTION WHEN others THEN
+    RETURN QUERY SELECT json_build_object('estado', 'error', 'mensaje', SQLERRM);
+END;
+$$ LANGUAGE plpgsql;
+-- -- llamada a la funcion
+-- SELECT * FROM  fn_obtener_usuario_y_rol(2);
