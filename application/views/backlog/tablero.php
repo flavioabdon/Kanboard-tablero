@@ -31,88 +31,7 @@
           </div>
           <!--  -->
           <div class="card-body" id="body_backlog">
-          <?php
-                  //
-                  function calcularTiempoTranscurrido($fechaPasada) {
-                    // Crear objetos DateTime
-                    $fechaPasada = new DateTime($fechaPasada);
-                    $fechaActual = new DateTime();
-
-                    $intervalo = $fechaPasada->diff($fechaActual);
-                
-                    $anos = $intervalo->y;
-                    $meses = $intervalo->m;
-                    $dias = $intervalo->d;
-                    $horas = $intervalo->h;
-                    $minutos = $intervalo->i;
-                    $segundos = $intervalo->s;
-                
-                    if ($anos > 0) {
-                        return "Hace " . $anos . " años y " . $dias . " días.";
-                    } elseif ($dias > 0) {
-                        return "Hace " . $dias . " días.";
-                    } elseif ($horas > 0) {
-                        return "Hace " . $horas . " horas.";
-                    } elseif ($minutos > 0) {
-                        return "Hace " . $minutos . " minutos.";
-                    } else {
-                        return "Hace " . $segundos . " segundos.";
-                    }
-                }
-                  //
-                  $url = base_url()."index.php/backlog/c_tablero/lista_tablero"; // URL a la que hacer la petición
-                  $ch = curl_init($url); // Inicia una nueva sesión cURL
-
-                  // Configura las opciones para la transferencia cURL
-                  curl_setopt($ch, CURLOPT_POST, 1);
-                  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-                  $respuesta = curl_exec($ch); // Ejecuta la petición POST
-
-                  curl_close($ch); // Cierra la sesión cURL
-
-                  $json = json_decode($respuesta, true); // Decodifica el JSON recibido
-
-                  foreach ($json as $index => $item) {
-                      $resultado = json_decode($item["resultado"], true);
-                      if($resultado["estadohistoria"]=="backlog"){
-                        $color = "";
-                        if($resultado["valorprioridad"]=="Alta"){
-                          $color = "card-danger ";
-                        }
-                        elseif($resultado["valorprioridad"]=="Media"){
-                          $color = "card-warning";
-                        }
-                        else{
-                          $color = "card-success";
-                        }
-                        //
-                        echo '<div class="card '.$color.'  card-outline" id="'.$resultado["codbacklog"].'">';
-                        echo  '<div class="card-header" >';
-                        echo    '<p class="card-title" ><small class="font-weight-bold">'.$resultado["identificador"].'</small></p>';
-                        echo     '<div class="card-tools">';
-                        echo       '<a><small class="text-muted">'.calcularTiempoTranscurrido($resultado["fecha_creacion"]).'</small></a>';
-                        echo       '<a href="#" class="btn btn-tool btn-link">#'.$resultado["codbacklog"].'</a>';
-                        echo       '<a id="modal-51969" href="#modal-container-51969" role="button" data-toggle="modal" class="btn btn-tool" onClick="cargar_modal('.$resultado["codbacklog"].')">';
-                        echo         '<i class="fas fa-eye"></i>';
-                        echo       '</a>';
-                        echo       '<a role="button"  class="btn btn-tool" onClick="eliminar_historia('.$resultado["codbacklog"].')">';
-                        echo         '<i class="fas fa-trash"></i>';
-                        echo       '</a>';
-                        echo     '</div>';
-            
-                        echo   '</div>';
-                        echo   '<div class="card-body">';
-                        echo     '<p class="small"><b> Creado:</b>'.$resultado["nombre_asignado_por"].'</p>';
-                        echo     '<p class="small"><b> Prioridad:</b>'.$resultado["valorprioridad"]." (".$resultado["bonificacion"].' Pts.) <b>Duración:</b>'.$resultado["tiempoestimado"].'Hrs.</p>';
-                        echo     '<p class="small"><b> Descripción:</b>'.$resultado["hdescripcion"].'</p>';  
-                        echo   '</div>';
-                        echo '</div>';
-                      }
-                      //
-                  }
-            ?>
-          <!--  -->
+          <!-- Codigo append js aqui -->
           </div>
         </div>
         <div class="card card-row card-primary" id="columna_to_do">
@@ -122,48 +41,7 @@
             </h3>
           </div>
           <div class="card-body" id="body_to_do">
-          <?php
-                  //
-                  
-                  foreach ($json as $index => $item) {
-                      $resultado = json_decode($item["resultado"], true);
-                      if($resultado["estadohistoria"]=="todo"){
-                        $color = "";
-                        if($resultado["valorprioridad"]=="Alta"){
-                          $color = "card-danger ";
-                        }
-                        elseif($resultado["valorprioridad"]=="Media"){
-                          $color = "card-warning";
-                        }
-                        else{
-                          $color = "card-success";
-                        }
-                        //
-                        echo '<div class="card '.$color.'  card-outline" id="'.$resultado["codbacklog"].'">';
-                        echo  '<div class="card-header" >';
-                        echo    '<p class="card-title" ><small class="font-weight-bold">'.$resultado["identificador"].'</small></p>';
-                        echo     '<div class="card-tools">';
-                        echo       '<a><small class="text-muted">'.calcularTiempoTranscurrido($resultado["fecha_creacion"]).'</small></a>';
-                        echo       '<a href="#" class="btn btn-tool btn-link">#'.$resultado["codbacklog"].'</a>';
-                        echo       '<a id="modal-51969" href="#modal-container-51969" role="button" data-toggle="modal" class="btn btn-tool" onClick="cargar_modal('.$resultado["codbacklog"].')">';
-                        echo         '<i class="fas fa-eye"></i>';
-                        echo       '</a>';
-                        echo       '<a role="button"  class="btn btn-tool" onClick="eliminar_historia('.$resultado["codbacklog"].')">';
-                        echo         '<i class="fas fa-trash"></i>';
-                        echo       '</a>';
-                        echo     '</div>';
-            
-                        echo   '</div>';
-                        echo   '<div class="card-body">';
-                        echo     '<p class="small"><b> Creado:</b>'.$resultado["nombre_asignado_por"].' <b>&nbsp&nbsp&nbsp&nbspAsignado a </b>'.$resultado["nombre_asignado_a"].'</p>';
-                        echo     '<p class="small"><b> Prioridad:</b>'.$resultado["valorprioridad"]." (".$resultado["bonificacion"].' Pts.) <b>Duración:</b>'.$resultado["tiempoestimado"].'Hrs.</p>';
-                        echo     '<p class="small"><b> Descripción:</b>'.$resultado["hdescripcion"].'</p>';
-                        echo   '</div>';
-                        echo '</div>';
-                      }
-                      //
-                  }
-            ?>
+              <!-- Codigo apppend aqui -->
           </div>
         </div>
         <div class="card card-row card-default" id="columna_in_progress">
@@ -173,51 +51,7 @@
             </h3>
           </div>
           <div class="card-body" id="body_in_progress">
-          <?php
-                  //
-                  
-                  //
-                  
-                  foreach ($json as $index => $item) {
-                      $resultado = json_decode($item["resultado"], true);
-                      if($resultado["estadohistoria"]=="inprogress"){
-                        $color = "";
-                        if($resultado["valorprioridad"]=="Alta"){
-                          $color = "card-danger ";
-                        }
-                        elseif($resultado["valorprioridad"]=="Media"){
-                          $color = "card-warning";
-                        }
-                        else{
-                          $color = "card-success";
-                        }
-                        //
-                        echo '<div class="card '.$color.'  card-outline" id="'.$resultado["codbacklog"].'">';
-                        echo  '<div class="card-header" >';
-                        echo    '<p class="card-title" ><small class="font-weight-bold">'.$resultado["identificador"].'</small></p>';
-                        echo     '<div class="card-tools">';
-                        echo       '<a><small class="text-muted">'.calcularTiempoTranscurrido($resultado["fecha_creacion"]).'</small></a>';
-                        echo       '<a href="#" class="btn btn-tool btn-link">#'.$resultado["codbacklog"].'</a>';
-                        echo       '<a id="modal-51969" href="#modal-container-51969" role="button" data-toggle="modal" class="btn btn-tool" onClick="cargar_modal('.$resultado["codbacklog"].')">';
-                        echo         '<i class="fas fa-eye"></i>';
-                        echo       '</a>';
-                        echo       '<a role="button"  class="btn btn-tool" onClick="eliminar_historia('.$resultado["codbacklog"].')">';
-                        echo         '<i class="fas fa-trash"></i>';
-                        echo       '</a>';
-                        echo     '</div>';
-            
-                        echo   '</div>';
-                        echo   '<div class="card-body">';
-                        echo     '<p class="small"><b> Creado:</b>'.$resultado["nombre_asignado_por"].' <b>&nbsp&nbsp&nbsp&nbspAsignado a </b>'.$resultado["nombre_asignado_a"].'</p>';
-                        echo     '<p class="small"><b> Prioridad:</b>'.$resultado["valorprioridad"]." (".$resultado["bonificacion"].' Pts.) <b>Duración:</b>'.$resultado["tiempoestimado"].'Hrs.</p>';
-                        echo     '<p class="small"><b> Tiempo Restante:</b>'.$resultado["tiempo_restante"].'</p>';
-                        echo     '<p class="small"><b> Descripción:</b>'.$resultado["hdescripcion"].'</p>';
-                        echo   '</div>';
-                        echo '</div>';
-                      }
-                      //
-                  }
-            ?>            
+            <!-- codigo generado aqui -->
           </div>
         </div>
         <div class="card card-row card-success" id="card_done">
@@ -227,56 +61,7 @@
             </h3>
           </div>
           <div class="card-body" id="body_done">
-            <?php
-                  //
-                  
-                  //
-                  
-                  foreach ($json as $index => $item) {
-                      $resultado = json_decode($item["resultado"], true);
-                      if($resultado["estadohistoria"]=="done"){
-                        $color = "";
-                        if($resultado["valorprioridad"]=="Alta"){
-                          $color = "card-danger ";
-                        }
-                        elseif($resultado["valorprioridad"]=="Media"){
-                          $color = "card-warning";
-                        }
-                        else{
-                          $color = "card-success";
-                        }
-                        //
-                        echo '<div class="card '.$color.'  card-outline" id="'.$resultado["codbacklog"].'">';
-                        echo  '<div class="card-header" >';
-                        echo    '<p class="card-title" ><small class="font-weight-bold">'.$resultado["identificador"].'</small></p>';
-                        echo     '<div class="card-tools">';
-                        echo       '<a><small class="text-muted">'.calcularTiempoTranscurrido($resultado["fecha_creacion"]).'</small></a>';
-                        echo       '<a href="#" class="btn btn-tool btn-link">#'.$resultado["codbacklog"].'</a>';
-                        // echo       '<a id="modal-51969" href="#modal-container-51969" role="button" data-toggle="modal" class="btn btn-tool" onClick="cargar_modal('.$resultado["codbacklog"].')">';
-                        // echo         '<i class="fas fa-eye"></i>';
-                        // echo       '</a>';
-                        echo       '<a role="button"  class="btn btn-tool" onClick="eliminar_historia('.$resultado["codbacklog"].')">';
-                        echo         '<i class="fas fa-trash"></i>';
-                        echo       '</a>';
-                        echo       '<a role="button"  class="btn btn-tool" onClick="historia_revisada('.$resultado["codbacklog"].')">';
-                        echo         '<i class="fas fa-check"></i>';
-                        echo       '</a>';
-                        echo     '</div>';
-            
-                        echo   '</div>';
-                        echo   '<div class="card-body">';
-                        echo     '<p class="small"><b> Creado:</b>'.$resultado["nombre_asignado_por"].' <b>&nbsp&nbsp&nbsp&nbspAsignado a </b>'.$resultado["nombre_asignado_a"].'</p>';
-                        echo     '<p class="small"><b> Prioridad:</b>'.$resultado["valorprioridad"]." (".$resultado["bonificacion"].' Pts.) <b>Duración:</b>'.$resultado["tiempoestimado"].'Hrs.</p>';
-                        echo     '<p class="small"><b> Bonificación:</b>'.$resultado["bonificacion_final"].' Pts.</p>';
-                        echo     '<p class="small"><b> Descripción:</b>'.$resultado["hdescripcion"].'</p>';
-                        echo     '<p class="small"><b> Solución:</b>'.$resultado["descripcionsolucion"].'</p>';
-                        echo     '<p class="small"><b> Incidencia:</b>'.$resultado["descripcionincidencia"].'</p>';
-                        echo   '</div>';
-                        echo '</div>';
-                      }
-                      //
-                  }
-            ?>   
+                <!-- Codigo js append aqui  -->
           </div>
         </div>
       </div>
@@ -1132,8 +917,8 @@
                       html += '<div class="card-tools">';
                       html += '<a><small class="text-muted" data-placement="top" title="'+item.fecha_creacion+'">'+calcularTiempoTranscurrido(item.fecha_creacion)+'</small></a>';
                       html += '<a href="#" class="btn btn-tool btn-link">#' + item.codbacklog + '</a>';
-                      html += '<a id="modal-51969" href="#modal-container-51969" role="button" data-toggle="modal" class="btn btn-tool" onClick="cargar_modal(' + item.codbacklog + ')">';
-                      html += '<i class="fas fa-eye"></i>';
+                      // html += '<a id="modal-51969" href="#modal-container-51969" role="button" data-toggle="modal" class="btn btn-tool" onClick="cargar_modal(' + item.codbacklog + ')">';
+                      // html += '<i class="fas fa-eye"></i>';
                       html += '</a>';
                       html += '<a role="button" class="btn btn-tool" onClick="eliminar_historia(' + item.codbacklog + ')">';
                       html += '<i class="fas fa-trash"></i>';
@@ -1165,7 +950,7 @@
                       html += '<p class="card-title"><small class="font-weight-bold">' + item.identificador + '</small></p>';
                       html += '<div class="card-tools">';
                       html += '<a><small class="text-muted" data-placement="top" title="'+item.fecha_creacion+'">'+calcularTiempoTranscurrido(item.fecha_creacion)+'</small></a>';
-                      html += '<i class="fas fa-eye"></i>';
+                      // html += '<i class="fas fa-eye"></i>';
                       html += '</a>';
                       html += '<a role="button" class="btn btn-tool" onClick="eliminar_historia(' + item.codbacklog + ')">';
                       html += '<i class="fas fa-trash"></i>';
@@ -1198,8 +983,8 @@
                       html += '<div class="card-tools">';
                       html += '<a><small class="text-muted" data-placement="top" title="'+item.fecha_creacion+'">'+calcularTiempoTranscurrido(item.fecha_creacion)+'</small></a>';
                       html += '<a href="#" class="btn btn-tool btn-link">#' + item.codbacklog + '</a>';
-                      html += '<a id="modal-51969" href="#modal-container-51969" role="button" data-toggle="modal" class="btn btn-tool" onClick="cargar_modal(' + item.codbacklog + ')">';
-                      html += '<i class="fas fa-eye"></i>';
+                      // html += '<a id="modal-51969" href="#modal-container-51969" role="button" data-toggle="modal" class="btn btn-tool" onClick="cargar_modal(' + item.codbacklog + ')">';
+                      // html += '<i class="fas fa-eye"></i>';
                       html += '</a>';
                       html += '<a role="button" class="btn btn-tool" onClick="eliminar_historia(' + item.codbacklog + ')">';
                       html += '<i class="fas fa-trash"></i>';
@@ -1233,8 +1018,8 @@
                       html += '<div class="card-tools">';
                       html += '<a><small class="text-muted" data-placement="top" title="'+item.fecha_creacion+'">'+calcularTiempoTranscurrido(item.fecha_creacion)+'</small></a>';
                       html += '<a href="#" class="btn btn-tool btn-link">#' + item.codbacklog + '</a>';
-                      html += '<a id="modal-51969" href="#modal-container-51969" role="button" data-toggle="modal" class="btn btn-tool" onClick="cargar_modal(' + item.codbacklog + ')">';
-                      html += '<i class="fas fa-eye"></i>';
+                      // html += '<a id="modal-51969" href="#modal-container-51969" role="button" data-toggle="modal" class="btn btn-tool" onClick="cargar_modal(' + item.codbacklog + ')">';
+                      // html += '<i class="fas fa-eye"></i>';
                       html += '</a>';
                       html += '<a role="button" class="btn btn-tool" onClick="eliminar_historia(' + item.codbacklog + ')">';
                       html += '<i class="fas fa-trash"></i>';
