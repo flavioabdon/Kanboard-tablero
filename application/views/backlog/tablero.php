@@ -872,9 +872,9 @@
                     $('#body_done').append(construirHTMLdone(innerData));
                 });
             
-                function calcularTiempoTranscurrido(fechaPasada) {
+                function calcularTiempoTranscurrido(fechaPasada,fechaActual) {
                     var fechaPasada = new Date(fechaPasada);
-                    var fechaActual = new Date();
+                    var fechaActual = new Date(fechaActual);
 
                     var intervalo = fechaActual - fechaPasada;
                     var segundos = Math.floor((intervalo / 1000) % 60);
@@ -915,7 +915,7 @@
                       html += '<div class="card-header">';
                       html += '<p class="card-title"><small class="font-weight-bold">' + item.identificador + '</small></p>';
                       html += '<div class="card-tools">';
-                      html += '<a><small class="text-muted" data-placement="top" title="'+item.fecha_creacion+'">'+calcularTiempoTranscurrido(item.fecha_creacion)+'</small></a>';
+                      html += '<a><small class="text-muted" data-placement="top" title="'+item.fecha_creacion+'">'+calcularTiempoTranscurrido(item.fecha_creacion,item.fecha_servidor)+'</small></a>';
                       html += '<a href="#" class="btn btn-tool btn-link">#' + item.codbacklog + '</a>';
                       // html += '<a id="modal-51969" href="#modal-container-51969" role="button" data-toggle="modal" class="btn btn-tool" onClick="cargar_modal(' + item.codbacklog + ')">';
                       // html += '<i class="fas fa-eye"></i>';
