@@ -1065,7 +1065,202 @@
     defaultDate: "01:00",
     dateFormat: "H:i",
   });
-  setTimeout(function(){
-    location.reload();
-  }, 63000);
+</script>
+<script>
+    function cargarContenido() {
+        // Realizar la petición AJAX para obtener los datos
+        $.ajax({
+          url: "<?= base_url() ?>index.php/backlog/c_tablero/lista_tablero",
+          type: "POST",
+          datatype:"json",// Puedes cambiar GET por POST si lo necesitas
+            success: function (data) {
+              var json = JSON.parse(data);
+                $('#body_backlog').html('');
+                $('#body_to_do').html('');
+                $('#body_in_progress').html('');
+                $('#body_done').html('');
+                json.forEach(function (item) {
+                    innerData = JSON.parse(item.resultado);
+                    $('#body_backlog').append(construirHTMLbacklog(innerData));
+                    $('#body_to_do').append(construirHTMLtodo(innerData));
+                    $('#body_in_progress').append(construirHTMLinprogress(innerData));
+                    $('#body_done').append(construirHTMLdone(innerData));
+                });
+            
+                function calcularTiempoTranscurrido(fechaPasada) {
+                    var fechaPasada = new Date(fechaPasada);
+                    var fechaActual = new Date();
+
+                    var intervalo = fechaActual - fechaPasada;
+                    var segundos = Math.floor((intervalo / 1000) % 60);
+                    var minutos = Math.floor((intervalo / (1000 * 60)) % 60);
+                    var horas = Math.floor((intervalo / (1000 * 60 * 60)) % 24);
+                    var dias = Math.floor(intervalo / (1000 * 60 * 60 * 24));
+                    var meses = Math.floor(dias / 30);
+                    var anos = Math.floor(meses / 12);
+
+                    if (anos > 0) {
+                        return "Hace " + anos + " años y " + dias % 365 + " días.";
+                    } else if (meses > 0) {
+                        return "Hace " + meses + " meses y " + dias % 30 + " días.";
+                    } else if (dias > 0) {
+                        return "Hace " + dias + " días.";
+                    } else if (horas > 0) {
+                        return "Hace " + horas + " horas.";
+                    } else if (minutos > 0) {
+                        return "Hace " + minutos + " minutos.";
+                    } else {
+                        return "Hace " + segundos + " segundos.";
+                    }
+                }
+
+            
+                function construirHTMLbacklog(item) {
+                    var html = '';
+                    var color = '';
+                    if(item.estadohistoria=='backlog'){
+                      if (item.valorprioridad == "Alta") {
+                          color = "card-danger ";
+                      } else if (item.valorprioridad == "Media") {
+                          color = "card-warning";
+                      } else {
+                          color = "card-success";
+                      }
+                      html += '<div class="card ' + color + '  card-outline" id="' + item.codbacklog + '">';
+                      html += '<div class="card-header">';
+                      html += '<p class="card-title"><small class="font-weight-bold">' + item.identificador + '</small></p>';
+                      html += '<div class="card-tools">';
+                      html += '<a><small class="text-muted" data-placement="top" title="'+item.fecha_creacion+'">'+calcularTiempoTranscurrido(item.fecha_creacion)+'</small></a>';
+                      html += '<a href="#" class="btn btn-tool btn-link">#' + item.codbacklog + '</a>';
+                      html += '<a id="modal-51969" href="#modal-container-51969" role="button" data-toggle="modal" class="btn btn-tool" onClick="cargar_modal(' + item.codbacklog + ')">';
+                      html += '<i class="fas fa-eye"></i>';
+                      html += '</a>';
+                      html += '<a role="button" class="btn btn-tool" onClick="eliminar_historia(' + item.codbacklog + ')">';
+                      html += '<i class="fas fa-trash"></i>';
+                      html += '</a>';
+                      html += '</div>';
+                      html += '</div>';
+                      html += '<div class="card-body">';
+                      html += '<p class="small"><b> Creado:</b>' + item.nombre_asignado_por + '</p>';
+                      html += '<p class="small"><b> Prioridad:</b>' + item.valorprioridad + ' (' + item.bonificacion + ' Pts.) <b>Duración:</b>' + item.tiempoestimado + 'Hrs.</p>';
+                      html += '<p class="small"><b> Descripción:</b>' + item.hdescripcion + '</p>';
+                      html += '</div>';
+                      html += '</div>';
+                    }
+                    return html;
+                }
+                function construirHTMLtodo(item) {
+                  if(item.estadohistoria=='todo'){
+                      var html = '';
+                      var color = '';
+                      if (item.valorprioridad == "Alta") {
+                          color = "card-danger ";
+                      } else if (item.valorprioridad == "Media") {
+                          color = "card-warning";
+                      } else {
+                          color = "card-success";
+                      }
+                      html += '<div class="card ' + color + '  card-outline" id="' + item.codbacklog + '">';
+                      html += '<div class="card-header">';
+                      html += '<p class="card-title"><small class="font-weight-bold">' + item.identificador + '</small></p>';
+                      html += '<div class="card-tools">';
+                      html += '<a><small class="text-muted" data-placement="top" title="'+item.fecha_creacion+'">'+calcularTiempoTranscurrido(item.fecha_creacion)+'</small></a>';
+                      html += '<i class="fas fa-eye"></i>';
+                      html += '</a>';
+                      html += '<a role="button" class="btn btn-tool" onClick="eliminar_historia(' + item.codbacklog + ')">';
+                      html += '<i class="fas fa-trash"></i>';
+                      html += '</a>';
+                      html += '</div>';
+                      html += '</div>';
+                      html += '<div class="card-body">';
+                      html += '<p class="small"><b> Creado:</b>'+item.nombre_asignado_por+' <b>&nbsp&nbsp&nbsp&nbspAsignado a </b>'+item.nombre_asignado_a+'</p>';
+                      html += '<p class="small"><b> Prioridad:</b>'+item.valorprioridad+" ("+item.bonificacion+' Pts.) <b>Duración:</b>'+item.tiempoestimado+'Hrs.</p>';
+                      html += '<p class="small"><b> Descripción:</b>' + item.hdescripcion + '</p>';
+                      html += '</div>';
+                      html += '</div>';
+                  }
+                    return html;
+                }
+                function construirHTMLinprogress(item) {
+                  if(item.estadohistoria=='inprogress'){
+                      var html = '';
+                      var color = '';
+                      if (item.valorprioridad == "Alta") {
+                          color = "card-danger ";
+                      } else if (item.valorprioridad == "Media") {
+                          color = "card-warning";
+                      } else {
+                          color = "card-success";
+                      }
+                      html += '<div class="card ' + color + '  card-outline" id="' + item.codbacklog + '">';
+                      html += '<div class="card-header">';
+                      html += '<p class="card-title"><small class="font-weight-bold">' + item.identificador + '</small></p>';
+                      html += '<div class="card-tools">';
+                      html += '<a><small class="text-muted" data-placement="top" title="'+item.fecha_creacion+'">'+calcularTiempoTranscurrido(item.fecha_creacion)+'</small></a>';
+                      html += '<a href="#" class="btn btn-tool btn-link">#' + item.codbacklog + '</a>';
+                      html += '<a id="modal-51969" href="#modal-container-51969" role="button" data-toggle="modal" class="btn btn-tool" onClick="cargar_modal(' + item.codbacklog + ')">';
+                      html += '<i class="fas fa-eye"></i>';
+                      html += '</a>';
+                      html += '<a role="button" class="btn btn-tool" onClick="eliminar_historia(' + item.codbacklog + ')">';
+                      html += '<i class="fas fa-trash"></i>';
+                      html += '</a>';
+                      html += '</div>';
+                      html += '</div>';
+                      html += '<div class="card-body">';
+                      html += '<p class="small"><b> Creado:</b>'+item.nombre_asignado_por+' <b>&nbsp&nbsp&nbsp&nbspAsignado a </b>'+item.nombre_asignado_a+'</p>';
+                      html += '<p class="small"><b> Prioridad:</b>'+item.valorprioridad+" ("+item.bonificacion+' Pts.) <b>Duración:</b>'+item.tiempoestimado+'Hrs.</p>';
+                      html += '<p class="small"><b> Tiempo Restante:</b>'+item.tiempo_restante+'</p>';
+                      html += '<p class="small"><b> Descripción:</b>' + item.hdescripcion + '</p>';
+                      html += '</div>';
+                      html += '</div>';
+                  }
+                    return html;
+                }
+                function construirHTMLdone(item) {
+                  if(item.estadohistoria=='done'){
+                      var html = '';
+                      var color = '';
+                      if (item.valorprioridad == "Alta") {
+                          color = "card-danger ";
+                      } else if (item.valorprioridad == "Media") {
+                          color = "card-warning";
+                      } else {
+                          color = "card-success";
+                      }
+                      html += '<div class="card ' + color + '  card-outline" id="' + item.codbacklog + '">';
+                      html += '<div class="card-header">';
+                      html += '<p class="card-title"><small class="font-weight-bold">' + item.identificador + '</small></p>';
+                      html += '<div class="card-tools">';
+                      html += '<a><small class="text-muted" data-placement="top" title="'+item.fecha_creacion+'">'+calcularTiempoTranscurrido(item.fecha_creacion)+'</small></a>';
+                      html += '<a href="#" class="btn btn-tool btn-link">#' + item.codbacklog + '</a>';
+                      html += '<a id="modal-51969" href="#modal-container-51969" role="button" data-toggle="modal" class="btn btn-tool" onClick="cargar_modal(' + item.codbacklog + ')">';
+                      html += '<i class="fas fa-eye"></i>';
+                      html += '</a>';
+                      html += '<a role="button" class="btn btn-tool" onClick="eliminar_historia(' + item.codbacklog + ')">';
+                      html += '<i class="fas fa-trash"></i>';
+                      html += '</a>';
+                      html += '</div>';
+                      html += '</div>';
+                      html += '<div class="card-body">';
+                      html += '<p class="small"><b> Creado:</b>'+item.nombre_asignado_por+' <b>&nbsp&nbsp&nbsp&nbspAsignado a </b>'+item.nombre_asignado_a+'</p>';
+                      html += '<p class="small"><b> Prioridad:</b>'+item.valorprioridad+" ("+item.bonificacion+' Pts.) <b>Duración:</b>'+item.tiempoestimado+'Hrs.</p>';
+                      html += '<p class="small"><b> Bonificación:</b>'+item.bonificacion_final+' Pts.</p>';
+                      html += '<p class="small"><b> Descripción:</b>' + item.hdescripcion + '</p>';
+                      html += '<p class="small"><b> Solución:</b>'+item.descripcionsolucion+'</p>';
+                      html += '<p class="small"><b> Incidencia:</b>'+item.descripcionincidencia+'</p>';
+                      html += '</div>';
+                      html += '</div>';
+                  }
+                    return html;
+                }                                
+            
+            }
+        });
+    }
+
+    // Llamar a cargarContenido inicialmente
+    cargarContenido();
+
+    // Actualizar el contenido cada 30 segundos
+    setInterval(cargarContenido, 10000);
 </script>
