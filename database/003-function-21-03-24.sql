@@ -1242,7 +1242,8 @@ BEGIN
 		u3.nombre AS nombre_revisado,
 		b.creado_por ,
 		u4.nombre AS creado_por,
-		b.fecha_creacion 
+		b.fecha_creacion,
+        CURRENT_TIMESTAMP  as fecha_servidor
 		FROM backlog b JOIN historia h ON b.codhistoria  = h.codhistoria
 		JOIN  prioridad p ON p.codprioridad = h.codprioridad 
 		JOIN usuario u ON u.codusu = b.codusuario_asignado_por 
