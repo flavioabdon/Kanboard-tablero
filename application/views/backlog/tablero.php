@@ -900,10 +900,6 @@
                     $('#body_to_do').append(construirHTMLtodo(innerData));
                     $('#body_in_progress').append(construirHTMLinprogress(innerData));
                     $('#body_done').append(construirHTMLdone(innerData));
-                    
-                    console.log(innerData.fecha_servidor);
-                    console.log(innerData.fecha_creacion);
-                    console.log(calcularDiferencia(innerData.fecha_servidor, innerData.fecha_creacion));
                 });
             
                 function calcularDiferencia(fechaActual, fechaCreacion) {
