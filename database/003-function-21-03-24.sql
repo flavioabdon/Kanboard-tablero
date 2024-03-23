@@ -1365,7 +1365,21 @@ DECLARE
   	v_codusuario_asignado_por INTEGER;
 BEGIN
     BEGIN
-       IF exists (SELECT * FROM backlog b WHERE b.codbacklog =p_codbacklog  AND  b.estado_registro = 'activo')
+       IF  (SELECT EXISTS (
+							    SELECT * 
+							    FROM backlog b 
+							    WHERE b.codbacklog = p_codbacklog 
+							    AND b.estado_registro = 'activo'
+							)
+							AND EXISTS (
+							    SELECT * 
+							    FROM usuario u 
+							    JOIN usuario_rol ur ON u.codusu = ur.id_usuario_rol 
+							    JOIN rol r ON r.codrol = ur.codrol 
+							    WHERE r.nombrerol = 'Administrador' 
+							    AND u.estado_registro = 'activo' 
+							    AND u.codusu = p_creado_por
+							))
 	       THEN
 		       SELECT b.codhistoria INTO v_codhistoria  
 		    	FROM backlog b 
@@ -1407,7 +1421,7 @@ BEGIN
 	        );
 	       result := '{"estado": "exitoso", "mensaje": "null"}';
        ELSE
-       		result := '{"estado": "error", "mensaje": "Elimiado del backlog"}';
+       		result := '{"estado": "error", "mensaje": "No tiene permiso o eliminado del backlog."}';
       END IF;
     EXCEPTION WHEN others THEN
         result := json_build_object('estado', 'error', 'mensaje', SQLERRM);

@@ -30,35 +30,6 @@
             </h3>
           </div>
           <!--  -->
-          <?php
-                  //
-                  function calcularTiempoTranscurrido($fechaPasada) {
-                    // Crear objetos DateTime
-                    $fechaPasada = new DateTime($fechaPasada);
-                    $fechaActual = new DateTime();
-
-                    $intervalo = $fechaPasada->diff($fechaActual);
-                
-                    $anos = $intervalo->y;
-                    $meses = $intervalo->m;
-                    $dias = $intervalo->d;
-                    $horas = $intervalo->h;
-                    $minutos = $intervalo->i;
-                    $segundos = $intervalo->s;
-                
-                    if ($anos > 0) {
-                        return "Hace " . $anos . " años y " . $dias . " días.";
-                    } elseif ($dias > 0) {
-                        return "Hace " . $dias . " días.";
-                    } elseif ($horas > 0) {
-                        return "Hace " . $horas . " horas.";
-                    } elseif ($minutos > 0) {
-                        return "Hace " . $minutos . " minutos.";
-                    } else {
-                        return "Hace " . $segundos . " segundos.";
-                    }
-                }
-          ?>
           <div class="card-body" id="body_backlog">
           <!-- Codigo append js aqui -->
           </div>
@@ -288,7 +259,8 @@
     // cargar sprint relacionados al proyecto
     $(document).ready(function() {
     //
-      toastr.options.timeOut = 10000;
+        $('#fecha').val(moment().format('DD-MM-YY'));
+    //
         $('#id_proyecto').change(function() {
             //console.log($(this).val());
             const url = '<?= base_url() ?>index.php/backlog/c_tablero/lista_sprints'; // URL a la que hacer la petición
@@ -797,7 +769,7 @@
                 <div class="col-md-6">
                   <!-- Fecha -->
                   <div class="form-group">
-                    <label for="fecha">Fecha</label>
+                    <label for="fecha">Fecha límte</label>
                     <input type="text" class="form-control" id="fecha">
                   </div>
                 </div>
