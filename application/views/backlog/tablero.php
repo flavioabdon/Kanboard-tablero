@@ -30,6 +30,35 @@
             </h3>
           </div>
           <!--  -->
+          <?php
+                  //
+                  function calcularTiempoTranscurrido($fechaPasada) {
+                    // Crear objetos DateTime
+                    $fechaPasada = new DateTime($fechaPasada);
+                    $fechaActual = new DateTime();
+
+                    $intervalo = $fechaPasada->diff($fechaActual);
+                
+                    $anos = $intervalo->y;
+                    $meses = $intervalo->m;
+                    $dias = $intervalo->d;
+                    $horas = $intervalo->h;
+                    $minutos = $intervalo->i;
+                    $segundos = $intervalo->s;
+                
+                    if ($anos > 0) {
+                        return "Hace " . $anos . " años y " . $dias . " días.";
+                    } elseif ($dias > 0) {
+                        return "Hace " . $dias . " días.";
+                    } elseif ($horas > 0) {
+                        return "Hace " . $horas . " horas.";
+                    } elseif ($minutos > 0) {
+                        return "Hace " . $minutos . " minutos.";
+                    } else {
+                        return "Hace " . $segundos . " segundos.";
+                    }
+                }
+          ?>
           <div class="card-body" id="body_backlog">
           <!-- Codigo append js aqui -->
           </div>
@@ -851,6 +880,7 @@
     dateFormat: "H:i",
   });
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 <script>
     function cargarContenido() {
         // Realizar la petición AJAX para obtener los datos
@@ -870,34 +900,42 @@
                     $('#body_to_do').append(construirHTMLtodo(innerData));
                     $('#body_in_progress').append(construirHTMLinprogress(innerData));
                     $('#body_done').append(construirHTMLdone(innerData));
+                    
+                    console.log(innerData.fecha_servidor);
+                    console.log(innerData.fecha_creacion);
+                    console.log(calcularDiferencia(innerData.fecha_servidor, innerData.fecha_creacion));
                 });
             
-                function calcularTiempoTranscurrido(fechaPasada,fechaActual) {
-                    var fechaPasada = new Date(fechaPasada);
-                    var fechaActual = new Date(fechaActual);
+                function calcularDiferencia(fechaActual, fechaCreacion) {
+                    var fechaActualMoment = moment(fechaActual);
+                    var fechaCreacionMoment = moment(fechaCreacion);
+                    
+                    var diferencia = fechaActualMoment.diff(fechaCreacionMoment, 'milliseconds');
+                    
+                    var segundos = Math.abs(Math.round(moment.duration(diferencia).asSeconds()));
+                    var minutos = Math.abs(Math.round(moment.duration(diferencia).asMinutes()));
+                    var horas = Math.abs(Math.round(moment.duration(diferencia).asHours()));
+                    var dias = Math.abs(Math.round(moment.duration(diferencia).asDays()));
+                    var semanas = Math.abs(Math.round(moment.duration(diferencia).asWeeks()));
+                    var meses = Math.abs(Math.round(moment.duration(diferencia).asMonths()));
+                    var anos = Math.abs(Math.round(moment.duration(diferencia).asYears()));
 
-                    var intervalo = fechaActual - fechaPasada;
-                    var segundos = Math.floor((intervalo / 1000) % 60);
-                    var minutos = Math.floor((intervalo / (1000 * 60)) % 60);
-                    var horas = Math.floor((intervalo / (1000 * 60 * 60)) % 24);
-                    var dias = Math.floor(intervalo / (1000 * 60 * 60 * 24));
-                    var meses = Math.floor(dias / 30);
-                    var anos = Math.floor(meses / 12);
-
-                    if (anos > 0) {
-                        return "Hace " + anos + " años y " + dias % 365 + " días.";
-                    } else if (meses > 0) {
-                        return "Hace " + meses + " meses y " + dias % 30 + " días.";
-                    } else if (dias > 0) {
-                        return "Hace " + dias + " días.";
-                    } else if (horas > 0) {
-                        return "Hace " + horas + " horas.";
-                    } else if (minutos > 0) {
-                        return "Hace " + minutos + " minutos.";
+                    // Devolver el mensaje correspondiente
+                    if (segundos < 60) {
+                        return `Hace ${segundos} seg.`;
+                    } else if (minutos < 60) {
+                        return `Hace ${minutos} min.`;
+                    } else if (horas < 24) {
+                        return `Hace ${horas} hrs.`;
+                    } else if (dias < 30) {
+                        return `Hace ${semanas} sem.`;
+                    } else if (meses < 12) {
+                        return `Hace ${meses} mes.`;
                     } else {
-                        return "Hace " + segundos + " segundos.";
+                        return `Hace ${anos} años.`;
                     }
                 }
+
 
             
                 function construirHTMLbacklog(item) {
@@ -915,7 +953,7 @@
                       html += '<div class="card-header">';
                       html += '<p class="card-title"><small class="font-weight-bold">' + item.identificador + '</small></p>';
                       html += '<div class="card-tools">';
-                      html += '<a><small class="text-muted" data-placement="top" title="'+item.fecha_creacion+'">'+calcularTiempoTranscurrido(item.fecha_creacion,item.fecha_servidor)+'</small></a>';
+                      html += '<a><small class="text-muted" data-placement="top" title="'+item.fecha_creacion+'">'+calcularDiferencia(item.fecha_servidor, item.fecha_creacion)+'</small></a>';
                       html += '<a href="#" class="btn btn-tool btn-link">#' + item.codbacklog + '</a>';
                       // html += '<a id="modal-51969" href="#modal-container-51969" role="button" data-toggle="modal" class="btn btn-tool" onClick="cargar_modal(' + item.codbacklog + ')">';
                       // html += '<i class="fas fa-eye"></i>';
@@ -949,8 +987,7 @@
                       html += '<div class="card-header">';
                       html += '<p class="card-title"><small class="font-weight-bold">' + item.identificador + '</small></p>';
                       html += '<div class="card-tools">';
-                      html += '<a><small class="text-muted" data-placement="top" title="'+item.fecha_creacion+'">'+calcularTiempoTranscurrido(item.fecha_creacion)+'</small></a>';
-                      // html += '<i class="fas fa-eye"></i>';
+                      html += '<a><small class="text-muted" data-placement="top" title="'+item.fecha_creacion+'">'+calcularDiferencia(item.fecha_servidor, item.fecha_creacion)+'</small></a>';
                       html += '</a>';
                       html += '<a role="button" class="btn btn-tool" onClick="eliminar_historia(' + item.codbacklog + ')">';
                       html += '<i class="fas fa-trash"></i>';
@@ -981,10 +1018,8 @@
                       html += '<div class="card-header">';
                       html += '<p class="card-title"><small class="font-weight-bold">' + item.identificador + '</small></p>';
                       html += '<div class="card-tools">';
-                      html += '<a><small class="text-muted" data-placement="top" title="'+item.fecha_creacion+'">'+calcularTiempoTranscurrido(item.fecha_creacion)+'</small></a>';
+                      html += '<a><small class="text-muted" data-placement="top" title="'+item.fecha_creacion+'">'+calcularDiferencia(item.fecha_servidor, item.fecha_creacion)+'</small></a>';
                       html += '<a href="#" class="btn btn-tool btn-link">#' + item.codbacklog + '</a>';
-                      // html += '<a id="modal-51969" href="#modal-container-51969" role="button" data-toggle="modal" class="btn btn-tool" onClick="cargar_modal(' + item.codbacklog + ')">';
-                      // html += '<i class="fas fa-eye"></i>';
                       html += '</a>';
                       html += '<a role="button" class="btn btn-tool" onClick="eliminar_historia(' + item.codbacklog + ')">';
                       html += '<i class="fas fa-trash"></i>';
@@ -1016,13 +1051,16 @@
                       html += '<div class="card-header">';
                       html += '<p class="card-title"><small class="font-weight-bold">' + item.identificador + '</small></p>';
                       html += '<div class="card-tools">';
-                      html += '<a><small class="text-muted" data-placement="top" title="'+item.fecha_creacion+'">'+calcularTiempoTranscurrido(item.fecha_creacion)+'</small></a>';
+                      html += '<a><small class="text-muted" data-placement="top" title="'+item.fecha_creacion+'">'+calcularDiferencia(item.fecha_servidor, item.fecha_creacion)+'</small></a>';
                       html += '<a href="#" class="btn btn-tool btn-link">#' + item.codbacklog + '</a>';
                       // html += '<a id="modal-51969" href="#modal-container-51969" role="button" data-toggle="modal" class="btn btn-tool" onClick="cargar_modal(' + item.codbacklog + ')">';
                       // html += '<i class="fas fa-eye"></i>';
                       html += '</a>';
                       html += '<a role="button" class="btn btn-tool" onClick="eliminar_historia(' + item.codbacklog + ')">';
                       html += '<i class="fas fa-trash"></i>';
+                      html += '</a>';
+                      html += '<a role="button" class="btn btn-tool" onClick="historia_revisada(' + item.codbacklog + ')">';
+                      html += '<i class="fas fa-check"></i>';
                       html += '</a>';
                       html += '</div>';
                       html += '</div>';
@@ -1046,6 +1084,6 @@
     // Llamar a cargarContenido inicialmente
     cargarContenido();
 
-    // Actualizar el contenido cada 30 segundos
-    setInterval(cargarContenido, 10000);
+    // Actualizar el contenido cada 12
+    setInterval(cargarContenido, 12000);
 </script>
