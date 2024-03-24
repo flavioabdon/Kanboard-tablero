@@ -1282,6 +1282,7 @@ DECLARE
     v_sigla_proyecto VARCHAR(10);
     v_contador INTEGER;
     v_identificador VARCHAR(50);
+    v_sigla_sprint VARCHAR (10);
 BEGIN
     BEGIN
 	    INSERT INTO calendario(fecha,estado_registro,hora ,creado_por,fecha_creacion) VALUES (p_fecha,'activo',p_hora,p_creado_por,CURRENT_TIMESTAMP)
@@ -1296,18 +1297,15 @@ BEGIN
 		    WHERE s.codsprint = p_codSprint
        );
        
+      SELECT  nombresprint  INTO v_sigla_sprint FROM sprint s2 WHERE s2.codsprint = p_codSprint;
       	-- obtiene el numero de historias que estan el mismo proyecto, buscar el sprint que pertenece la historia
 		SELECT COUNT(*) INTO v_contador  FROM sprint s 
 		JOIN proyecto p ON s.codproyecto = p.codproyecto 
 		JOIN historia h ON h.codsprint =s.codsprint 
-		WHERE  p.codproyecto = (
-			SELECT  DISTINCT  s.codproyecto  FROM historia h
-	       	JOIN sprint s ON s.codsprint = h.codsprint
-	       	WHERE s.codsprint = p_codSprint
-		);
+	       	WHERE s.codsprint = p_codSprint;
 			
         -- cuenta las historias existentes para el proyecto y genera el nuevo identificador
-        v_identificador := v_sigla_proyecto|| '-' || LPAD('' ||  v_contador + 1, 4, '0');
+        v_identificador := v_sigla_proyecto|| '-'|| v_sigla_sprint|| '-' || LPAD('' ||  v_contador + 1, 4, '0');
         INSERT INTO Historia (
             codSprint,
             codCalendario,
@@ -1346,7 +1344,7 @@ $$ LANGUAGE plpgsql;
 -- SELECT * FROM backlog b ;
 -- SELECT * FROM historia h ;
 -- -- llamada a la funcion
--- SELECT fn_nueva_historia(1,  '2022-12-31','15:00', 1, '01:00', 'Historia de usuario con insertar 1', 1);
+--  SELECT fn_nueva_historia(1,  '2022-12-31','15:00', 1, '01:00', 'Historia de usuario con insertar 1', 1);
 -----------------------------------------------------------------------------------------------------
 -- asignar historia
 -- funcion
