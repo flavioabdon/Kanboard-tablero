@@ -874,9 +874,9 @@
                 });
             
                 function calcularDiferencia(fechaActual, fechaCreacion) {
-                    var fechaActualMoment = moment(fechaActual);
-                    var fechaCreacionMoment = moment(fechaCreacion);
-                    
+                    var fechaActualMoment = moment.utc(fechaActual);
+                    var fechaCreacionMoment = moment.utc(fechaCreacion);
+
                     var diferencia = fechaActualMoment.diff(fechaCreacionMoment, 'milliseconds');
                     
                     var segundos = Math.abs(Math.round(moment.duration(diferencia).asSeconds()));
