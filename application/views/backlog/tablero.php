@@ -960,6 +960,7 @@
                       html += '<a role="button" class="btn btn-tool" onClick="eliminar_historia(' + item.codbacklog + ')">';
                       html += '<i class="fas fa-trash"></i>';
                       html += '</a>';
+                      html += '<a href="#" class="btn btn-tool btn-link">#' + item.codbacklog + '</a>'
                       html += '</div>';
                       html += '</div>';
                       html += '<div class="card-body">';

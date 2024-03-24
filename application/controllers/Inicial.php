@@ -31,7 +31,7 @@ class Inicial extends CI_Controller {
 		if (!isset($session_data['usuario_login'])) { //Si no encruentra en el array el objeto usuario_login redireccionar al login
 		  redirect('/login', 'location');
 		} else {
-			$idusu 			= $this->session->userdata('id_usuario');
+			$idusu= $this->session->userdata('id_usuario');
 			$json = $this->tablero->obtener_usuario_y_rol($idusu);
 	
 			$json = json_encode($json);

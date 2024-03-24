@@ -15,6 +15,10 @@ class M_tablero extends CI_Model {
         $query = $this->db->query("SELECT * FROM  fn_listar_tablero();");
         return $query->result();
     }
+    public function listar_tablero_usuario($codusuario) {
+        $query = $this->db->query("SELECT * FROM  fn_listar_tablero_por_usuario($codusuario);");
+        return $query->result();
+    }
     public function nueva_historia($codsprint,$fecha,$hora,$codprioridad,$tiempoestimado,$descripcion,$creadopor) {
         $query = $this->db->query("SELECT fn_nueva_historia($codsprint,  '$fecha','$hora', $codprioridad, '$tiempoestimado', '$descripcion', $creadopor);");
         return $query->result();

@@ -207,8 +207,7 @@
 </div>
 <script>
   function cargar_modal( str){
-    const url = '<?= base_url() ?>index.php/backlog/c_tablero/lista_tablero'; // URL a la que hacer la petición
-
+    const url = '<?= base_url() ?>index.php/backlog/c_tablero/lista_tablero_usuario';
     fetch(url, {
         method: 'POST',
     })
@@ -397,7 +396,7 @@
         toastr.error('Ha ocurrido un error al obtener los datos.'); // Muestra un mensaje de error con toast
     });
     //cargarhoraguardada
-    const url2 = '<?= base_url() ?>index.php/backlog/c_tablero/lista_tablero'; // URL a la que hacer la petición
+    const url2 = '<?= base_url() ?>index.php/backlog/c_tablero/lista_tablero_usuario'; // URL a la que hacer la petición
     fetch(url2, {
         method: 'POST',
     })
@@ -857,7 +856,7 @@
     function cargarContenido() {
         // Realizar la petición AJAX para obtener los datos
         $.ajax({
-          url: "<?= base_url() ?>index.php/backlog/c_tablero/lista_tablero",
+          url: "<?= base_url() ?>index.php/backlog/c_tablero/lista_tablero_usuario",
           type: "POST",
           datatype:"json",// Puedes cambiar GET por POST si lo necesitas
             success: function (data) {
@@ -957,6 +956,7 @@
                       html += '<div class="card-tools">';
                       html += '<a><small class="text-muted" data-placement="top" title="'+item.fecha_creacion+'">'+calcularDiferencia(item.fecha_servidor, item.fecha_creacion)+'</small></a>';
                       html += '</a>';
+                      html += '<a href="#" class="btn btn-tool btn-link">#' + item.codbacklog + '</a>'
                       html += '<a role="button" class="btn btn-tool" onClick="eliminar_historia(' + item.codbacklog + ')">';
                       html += '<i class="fas fa-trash"></i>';
                       html += '</a>';

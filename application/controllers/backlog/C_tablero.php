@@ -44,6 +44,11 @@ class C_tablero extends CI_Controller {
         $json = $this->tablero->listar_tablero();
 		echo json_encode($json);
     }
+	public function lista_tablero_usuario(){
+		$idusuario= $this->session->userdata('id_usuario');
+        $json = $this->tablero->listar_tablero_usuario($idusuario);
+		echo json_encode($json);
+    }
 	public function nueva_historia(){
 		//
 		$codsprint 			= $this->input->post('e_id_sprint');
