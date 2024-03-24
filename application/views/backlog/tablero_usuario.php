@@ -13,27 +13,11 @@
             </ol>
           </div>
         </div>
-        <div class="row">
-          <div class="col-sm-12">
-            <a id="modal-5300" onClick="cargar_nueva_historia()" href="#modal-container-5300" role="button" class="btn btn-primary float-sm-right" data-toggle="modal">Nueva historia</a>
-          </div>
-        </div>
       </div>
     </section>
 
     <section class="content pb-3">
       <div class="container-fluid h-50">
-        <div class="card card-row card-secondary" id="columna_backlog">
-          <div class="card-header" id="header_backlog">
-            <h3 class="card-title">
-              Backlog
-            </h3>
-          </div>
-          <!--  -->
-          <div class="card-body" id="body_backlog">
-          <!-- Codigo append js aqui -->
-          </div>
-        </div>
         <div class="card card-row card-primary" id="columna_to_do">
           <div class="card-header" id="header_to_do">
             <h3 class="card-title">
@@ -83,32 +67,11 @@
 
 <script>
   // Obtener las columnas del tablero Kanban utilizando sus IDs
-  var backlog = document.getElementById('body_backlog');
   var toDo = document.getElementById('body_to_do');
   var inProgress = document.getElementById('body_in_progress');
   var done = document.getElementById('body_done');
 
-  // Crear una nueva instancia de Sortable para la columna 'backlog'
-  new Sortable(backlog, {
-    group: 'shared', // establecer el mismo grupo para todas las listas
-    animation: 600,  // duración de la animación en ms
-    onEnd: function (evt) {  // función que se ejecuta cuando se detiene el arrastrar y soltar
-      if (evt.to != toDo) {  // si la tarjeta no se movió a la columna 'toDo'
-        //obtener el id del card que se movio
-        var card1 = document.getElementById(evt.item.id);
 
-        //cuando se mueve el card, regresar a la columna backlog
-        var backlg = document.getElementById('body_backlog');
-        backlg.appendChild(card1);  // mover la tarjeta a la columna todo
-      }
-      else{
-        asignar_historia(evt.item.id);
-      }
-       //mostrar un mensaje en la consola con el ID de la tarjeta y las columnas de origen y destino
-      //  console.log("Card " + evt.item.id + " moved from column " + evt.from.id + " to column " + evt.to.id);
-      //  console.log("Old index: " + evt.oldIndex + ", New index: " + evt.newIndex);
-    },
-  });
 
   // Crear una nueva instancia de Sortable para la columna 'toDo', similar a la anterior
   new Sortable(toDo, {
@@ -206,91 +169,9 @@
 			
 </div>
 <script>
-  function cargar_modal( str){
-    const url = '<?= base_url() ?>index.php/backlog/c_tablero/lista_tablero_usuario';
-    fetch(url, {
-        method: 'POST',
-    })
-    .then(response => response.json())
-    .then(data => {
-        data.forEach(item => {
-            const resultado = JSON.parse(item.resultado);
-            if(resultado.codbacklog==""+str){
-              //console.log("Descripcion:"+resultado.descripcion);
-              document.getElementById("titulo_modal").innerHTML = "ti";
-              document.getElementById("parrafo_modal").innerHTML = resultado.descripcion;
-            }
-        });
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        toastr.error('Ha ocurrido un error al obtener los datos.'); // Muestra un mensaje de error con toast
-    });
-  }
 
-  function cargar_nueva_historia() {
-    const url = '<?= base_url() ?>index.php/backlog/c_tablero/lista_proyectos'; // URL a la que hacer la petición
-    $('#id_proyecto').empty();
-    $('#id_sprint').empty();
-    fetch(url, {
-        method: 'POST',
-    })
-    .then(response => response.json())
-    .then(data => {
-            $('#id_proyecto').append($('<option>', { 
-                value: "",
-                text : "" 
-            }));
-            
-        data.forEach(item => {
-            const resultado = JSON.parse(item.resultado);
-            $('#id_proyecto').append($('<option>', { 
-                value: resultado.codproyecto,
-                text : resultado.descripcion 
-            }));
-        });
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        toastr.error('Ha ocurrido un error al obtener los datos.'); // Muestra un mensaje de error con toast
-    });
 
-    // cargar sprint relacionados al proyecto
-    $(document).ready(function() {
-    //
-        $('#fecha').val(moment().format('DD-MM-YY'));
-    //
-        $('#id_proyecto').change(function() {
-            //console.log($(this).val());
-            const url = '<?= base_url() ?>index.php/backlog/c_tablero/lista_sprints'; // URL a la que hacer la petición
-            let cod_proyecto = $(this).val();
-            fetch(url, {
-                method: 'POST',
-            })
-            .then(response => response.json())
-            .then(data => {
-                $('#id_sprint').empty();
-                data.forEach(item => {
-                    const resultado = JSON.parse(item.resultado);
-                    if(resultado.codproyecto == cod_proyecto){
-                        $('#id_sprint').append($('<option>', { 
-                            value: resultado.codsprint,
-                            text : resultado.descripcion 
-                        }));
-                    }
-                    else{
 
-                    }
-                });
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                toastr.error('Ha ocurrido un error al obtener los datos.'); // Muestra un mensaje de error con toast
-            });            
-            //
-        });
-    });
-  }
   // cargar prioridades
   const url = '<?= base_url() ?>index.php/backlog/c_tablero/lista_prioridades'; // URL a la que hacer la petición
   $('#id_prioridad').empty();
@@ -312,213 +193,14 @@
       toastr.error('Ha ocurrido un error al obtener los datos.'); // Muestra un mensaje de error con toast
   });
   // Funcion guardar nueva historia
-  function guardar_historia() {
-      let f_id_sprint   = $('#id_sprint').val();
-      let f_fecha       = $('#fecha').val();
-      let parts = f_fecha.split('-');
-      let date = new Date(parts[2], parts[1] - 1, parts[0]);
-      f_fecha = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2);
-      
-      let f_hora        = $('#hora').val();
-      let f_id_prioridad= $('#id_prioridad').val();
-      let f_tiempo_estimado= $('#tiempo_estimado').val();
-      let f_descripcion = $('#descripcion').val();
-      // console.log(":"+f_id_sprint+":"+f_fecha+":"+f_hora+":"+f_id_prioridad+":"+f_tiempo_estimado+":"+f_descripcion);
 
-      // Hacer la petición POST con jQuery AJAX
-      $.ajax({
-          url: "<?= base_url() ?>index.php/backlog/c_tablero/nueva_historia",
-          type: "POST",
-          datatype: "json",
-          data: {
-            e_id_sprint: f_id_sprint,
-            e_fecha: f_fecha,
-            e_hora: f_hora,
-            e_id_prioridad: f_id_prioridad,
-            e_tiempo_estimado: f_tiempo_estimado,
-            e_descripcion: f_descripcion
-          },
-          success: function(response) {
-            //console.log(response);
-            // parseando response
-            var json = JSON.parse(response);
-            let innerData = JSON.parse(json[0].fn_nueva_historia);
-            // console.log(innerData.estado)
-             if (innerData.estado === "exitoso") {
-                $('#modal-container-5300').modal('hide');
-                 toastr.success('Se insertó correctamente.');
-                 location.href ="<?= base_url() ?>index.php/tablero";
-
-             } else if (innerData.estado === "error") {
-                 toastr.error('Ha ocurrido un error al insertar los datos.'+innerData.mensaje);
-             }
-          },
-          error: function(error) {
-            console.log("error");
-              console.error('Error:', error);
-              //toastr.error('Ha ocurrido un error al hacer la petición.');
-          }
-      });
-
-  }
   function cancelar_historia(){
     $(this).find('#modal-container-5300').trigger('reset');
   }
 
-  function asignar_historia(idbacklog){
-    $('#id_backlog').text(idbacklog);
-    var modal = document.getElementById('modal-container-5200');
-    // Utiliza la funcionalidad de Bootstrap para abrir el modal
-    $(modal).modal('show');
-    // Cargar los usuarios
-    const url = '<?= base_url() ?>index.php/backlog/c_tablero/lista_usuarios'; // URL a la que hacer la petición
-    $('#id_usuario').empty();
-    fetch(url, {
-        method: 'POST',
-    })
-    .then(response => response.json())
-    .then(data => {
-            $('#id_usuario').append($('<option>', { 
-                value: "",
-                text : "" 
-            }));
-            
-        data.forEach(item => {
-            const resultado = JSON.parse(item.resultado);
-            $('#id_usuario').append($('<option>', { 
-                value: resultado.codusu,
-                text : resultado.nombre + " " +resultado.apellido 
-            }));
-        });
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        toastr.error('Ha ocurrido un error al obtener los datos.'); // Muestra un mensaje de error con toast
-    });
-    //cargarhoraguardada
-    const url2 = '<?= base_url() ?>index.php/backlog/c_tablero/lista_tablero_usuario'; // URL a la que hacer la petición
-    fetch(url2, {
-        method: 'POST',
-    })
-    .then(response => response.json())
-    .then(data => {
-            
-        data.forEach(item => {
-            const resultado = JSON.parse(item.resultado);
-            if(resultado.codbacklog == idbacklog){
-              $('#tiempo_estimado1').val(resultado.tiempoestimado);
-            }
-        });
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        toastr.error('Ha ocurrido un error al obtener los datos.'); // Muestra un mensaje de error con toast
-    });
-      // fin cargar
-      return idbacklog;
-  }
-  function eliminar_historia(idbacklog){
-    let f_id_backlog   = idbacklog
-      console.log("."+f_id_backlog);
-      // Hacer la petición POST con jQuery AJAX
-      $.ajax({
-          url: "<?= base_url() ?>index.php/backlog/c_tablero/eliminar_historia",
-          type: "POST",
-          datatype: "json",
-          data: {
-            e_id_backlog: f_id_backlog
-          },
-          success: function(response) {
-            console.log(response);
-            // parseando response
-            var json = JSON.parse(response);
-            let innerData = JSON.parse(json[0].fn_eliminar_historia);
-            // console.log(innerData.estado)
-             if (innerData.estado === "exitoso") {
-                 toastr.success('Se insertó correctamente.');
-                 location.href ="<?= base_url() ?>index.php/tablero";
+ 
 
-             } else if (innerData.estado === "error") {
-                 toastr.error('Ha ocurrido un error al insertar los datos.'+innerData.mensaje);
-             }
-          },
-          error: function(error) {
-            console.log("error");
-              console.error('Error:', error);
-              toastr.error('Ha ocurrido un error al hacer la petición.');
-          }
-      });
-  }
-  function historia_revisada(idbacklog){
-    let f_id_backlog   = idbacklog
-      console.log("."+f_id_backlog);
-      // Hacer la petición POST con jQuery AJAX
-      $.ajax({
-          url: "<?= base_url() ?>index.php/backlog/c_tablero/historia_revisada",
-          type: "POST",
-          datatype: "json",
-          data: {
-            e_id_backlog: f_id_backlog
-          },
-          success: function(response) {
-            console.log(response);
-            // parseando response
-            var json = JSON.parse(response);
-            let innerData = JSON.parse(json[0].fn_historia_revisada);
-            // console.log(innerData.estado)
-             if (innerData.estado === "exitoso") {
-                 toastr.success('Se insertó correctamente.');
-                 location.href ="<?= base_url() ?>index.php/tablero";
 
-             } else if (innerData.estado === "error") {
-                 toastr.error('Ha ocurrido un error al insertar los datos.'+innerData.mensaje);
-             }
-          },
-          error: function(error) {
-            console.log("error");
-              console.error('Error:', error);
-              toastr.error('Ha ocurrido un error al hacer la petición.');
-          }
-      });
-
-  }
-  function asignar_guardar(){
-      let f_id_backlog   = $('#id_backlog').text();
-      let f_id_usuario   = $('#id_usuario').val();
-      let f_tiempo_estimado= $('#tiempo_estimado1').val();
-      console.log("."+f_id_backlog+"  :"+f_id_usuario);
-      // Hacer la petición POST con jQuery AJAX
-      $.ajax({
-          url: "<?= base_url() ?>index.php/backlog/c_tablero/asignar_historia",
-          type: "POST",
-          datatype: "json",
-          data: {
-            e_id_backlog: f_id_backlog,
-            e_tiempo_estimado: f_tiempo_estimado,
-            e_id_usuario: f_id_usuario
-          },
-          success: function(response) {
-            console.log(response);
-            // parseando response
-            var json = JSON.parse(response);
-            let innerData = JSON.parse(json[0].fn_asignar_historia);
-            // console.log(innerData.estado)
-             if (innerData.estado === "exitoso") {
-                $('#modal-container-5200').modal('hide');
-                 toastr.success('Se insertó correctamente.');
-                 location.href ="<?= base_url() ?>index.php/tablero";
-
-             } else if (innerData.estado === "error") {
-                 toastr.error('Ha ocurrido un error al insertar los datos.'+innerData.mensaje);
-             }
-          },
-          error: function(error) {
-            console.log("error");
-              console.error('Error:', error);
-              toastr.error('Ha ocurrido un error al hacer la petición.');
-          }
-      });
-  }
   function asignar_cancelar(){
         //obtener el id del card que se movio
         var card1 = document.getElementById($('#id_backlog').text());
@@ -690,139 +372,7 @@
 				
 			</div>
 </div>
-<!-- modal asignar card -->
-<div class="col-md-12">
-			<div class="modal fade" id="modal-container-5200" role="dialog" aria-labelledby="asignar_modal" aria-hidden="true">
-				<div class="modal-dialog" role="document">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h5 class="modal-title" id="titulo_modal">Asignar
-							</h5> 
-							<button type="button" class="close" data-dismiss="modal">
-								<span aria-hidden="true">×</span>
-							</button>
-						</div>
-						<div class="modal-body">
-              <!--  -->
-              <div class="row">
-                  <div class="form-group floating-label col-md-12">
-                    <label for="Usuario">Asignar a</label>
-                    <select class="form-control select-list" id="id_usuario" name="id_usuario" required>
-                    </select>
-                  </div>
-                  <h2 id="id_backlog" class="d-none" name="id_backlog"></h2>
 
-  
-                  <label for="tiempo_estimado1">Tiempo Estimado Hrs.</label>
-                  <input type="text" class="form-control" id="tiempo_estimado1" value="01:00">
-              </div>
-            </div>
-						<div class="modal-footer">
-							 
-							<button type="button" onClick="asignar_guardar()" class="btn btn-primary">
-								Asignar
-							</button> 
-							<button type="button" onClick="asignar_cancelar()" class="btn btn-secondary" data-dismiss="modal">
-								Cancelar
-							</button>
-						</div>
-					</div>
-					
-				</div>
-				
-			</div>
-</div>
-
-<!-- modal nueva historia -->
-<div class="col-md-12">		
-			<div class="modal fade" id="modal-container-5300" role="dialog" aria-labelledby="nuevahistoria_modal" aria-hidden="true">
-				<div class="modal-dialog" role="document">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h5 class="modal-title" id="titulo_modal">Nueva Historia
-							</h5> 
-							<button type="button" class="close" data-dismiss="modal">
-								<span aria-hidden="true">×</span>
-							</button>
-						</div>
-						<div class="modal-body">
-              <!--  -->
-              <div class="row">
-              <div class="col-md-6">
-                  <div class="form-group floating-label col-xs-12">
-                    <label for="Proyecto">Proyecto</label>
-                    <select class="form-control select-list" id="id_proyecto" name="id_proyecto" required>
-                    </select>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group floating-label col-xs-12">
-                    <label for="Sprint">Sprint</label>
-                    <select class="form-control select-list" id="id_sprint" name="id_sprint" required>
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <!--  -->
-              <div class="row">
-                <div class="col-md-6">
-                  <!-- Fecha -->
-                  <div class="form-group">
-                    <label for="fecha">Fecha límte</label>
-                    <input type="text" class="form-control" id="fecha">
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <!-- Hora -->
-                  <div class="form-group">
-                    <label for="hora">Hora</label>
-                    <input type="text" class="form-control" id="hora" value="23:59">
-                  </div>
-                </div>
-              </div>
-              <!--  -->
-              <!--  -->
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="form-group floating-label col-xs-12">
-                    <label for="Proyecto">Prioridad</label>
-                    <select class="form-control select-list" id="id_prioridad" name="id_prioridad" required>
-                    </select>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="tiempo_estimado">Tiempo Estimado Hrs.</label>
-                    <input type="text" class="form-control" id="tiempo_estimado" value="00:00">
-                  </div>
-                </div>
-              </div>
-              <!--  -->
-              <div class="row">
-                <div class="col-md-12">
-                  <label for="descripcion">
-                  Descripción
-                  </label>
-                  <textarea rows= "2" class="form-control" id="descripcion"></textarea>
-                </div>
-              </div>
-              <!--  -->
-						</div>
-						<div class="modal-footer">
-							 
-							<button type="button" onClick="guardar_historia()" class="btn btn-primary">
-								Guardar
-							</button> 
-							<button type="button" onClick="cancelar_historia()" class="btn btn-secondary" data-dismiss="modal">
-								Cancelar
-							</button>
-						</div>
-					</div>
-					
-				</div>
-				
-			</div>
-</div>
 <script type="text/javascript">
   flatpickr("#fecha", {
     enableTime: false,
@@ -861,13 +411,11 @@
           datatype:"json",// Puedes cambiar GET por POST si lo necesitas
             success: function (data) {
               var json = JSON.parse(data);
-                $('#body_backlog').html('');
                 $('#body_to_do').html('');
                 $('#body_in_progress').html('');
                 $('#body_done').html('');
                 json.forEach(function (item) {
                     innerData = JSON.parse(item.resultado);
-                    $('#body_backlog').append(construirHTMLbacklog(innerData));
                     $('#body_to_do').append(construirHTMLtodo(innerData));
                     $('#body_in_progress').append(construirHTMLinprogress(innerData));
                     $('#body_done').append(construirHTMLdone(innerData));
@@ -903,42 +451,6 @@
                     }
                 }
 
-
-            
-                function construirHTMLbacklog(item) {
-                    var html = '';
-                    var color = '';
-                    if(item.estadohistoria=='backlog'){
-                      if (item.valorprioridad == "Alta") {
-                          color = "card-danger ";
-                      } else if (item.valorprioridad == "Media") {
-                          color = "card-warning";
-                      } else {
-                          color = "card-success";
-                      }
-                      html += '<div class="card ' + color + '  card-outline" id="' + item.codbacklog + '">';
-                      html += '<div class="card-header">';
-                      html += '<p class="card-title"><small class="font-weight-bold">' + item.identificador + '</small></p>';
-                      html += '<div class="card-tools">';
-                      html += '<a><small class="text-muted" data-placement="top" title="'+item.fecha_creacion+'">'+calcularDiferencia(item.fecha_servidor, item.fecha_creacion)+'</small></a>';
-                      html += '<a href="#" class="btn btn-tool btn-link">#' + item.codbacklog + '</a>';
-                      // html += '<a id="modal-51969" href="#modal-container-51969" role="button" data-toggle="modal" class="btn btn-tool" onClick="cargar_modal(' + item.codbacklog + ')">';
-                      // html += '<i class="fas fa-eye"></i>';
-                      html += '</a>';
-                      html += '<a role="button" class="btn btn-tool" onClick="eliminar_historia(' + item.codbacklog + ')">';
-                      html += '<i class="fas fa-trash"></i>';
-                      html += '</a>';
-                      html += '</div>';
-                      html += '</div>';
-                      html += '<div class="card-body">';
-                      html += '<p class="small"><b> Creado:</b>' + item.nombre_asignado_por + '</p>';
-                      html += '<p class="small"><b> Prioridad:</b>' + item.valorprioridad + ' (' + item.bonificacion + ' Pts.) <b>Duración:</b>' + item.tiempoestimado + 'Hrs.</p>';
-                      html += '<p class="small"><b> Descripción:</b>' + item.hdescripcion + '</p>';
-                      html += '</div>';
-                      html += '</div>';
-                    }
-                    return html;
-                }
                 function construirHTMLtodo(item) {
                   if(item.estadohistoria=='todo'){
                       var html = '';
@@ -955,11 +467,7 @@
                       html += '<p class="card-title"><small class="font-weight-bold">' + item.identificador + '</small></p>';
                       html += '<div class="card-tools">';
                       html += '<a><small class="text-muted" data-placement="top" title="'+item.fecha_creacion+'">'+calcularDiferencia(item.fecha_servidor, item.fecha_creacion)+'</small></a>';
-                      html += '</a>';
                       html += '<a href="#" class="btn btn-tool btn-link">#' + item.codbacklog + '</a>'
-                      html += '<a role="button" class="btn btn-tool" onClick="eliminar_historia(' + item.codbacklog + ')">';
-                      html += '<i class="fas fa-trash"></i>';
-                      html += '</a>';
                       html += '</div>';
                       html += '</div>';
                       html += '<div class="card-body">';
@@ -988,10 +496,6 @@
                       html += '<div class="card-tools">';
                       html += '<a><small class="text-muted" data-placement="top" title="'+item.fecha_creacion+'">'+calcularDiferencia(item.fecha_servidor, item.fecha_creacion)+'</small></a>';
                       html += '<a href="#" class="btn btn-tool btn-link">#' + item.codbacklog + '</a>';
-                      html += '</a>';
-                      html += '<a role="button" class="btn btn-tool" onClick="eliminar_historia(' + item.codbacklog + ')">';
-                      html += '<i class="fas fa-trash"></i>';
-                      html += '</a>';
                       html += '</div>';
                       html += '</div>';
                       html += '<div class="card-body">';
@@ -1023,13 +527,6 @@
                       html += '<a href="#" class="btn btn-tool btn-link">#' + item.codbacklog + '</a>';
                       // html += '<a id="modal-51969" href="#modal-container-51969" role="button" data-toggle="modal" class="btn btn-tool" onClick="cargar_modal(' + item.codbacklog + ')">';
                       // html += '<i class="fas fa-eye"></i>';
-                      html += '</a>';
-                      html += '<a role="button" class="btn btn-tool" onClick="eliminar_historia(' + item.codbacklog + ')">';
-                      html += '<i class="fas fa-trash"></i>';
-                      html += '</a>';
-                      html += '<a role="button" class="btn btn-tool" onClick="historia_revisada(' + item.codbacklog + ')">';
-                      html += '<i class="fas fa-check"></i>';
-                      html += '</a>';
                       html += '</div>';
                       html += '</div>';
                       html += '<div class="card-body">';

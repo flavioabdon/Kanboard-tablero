@@ -1374,7 +1374,7 @@ BEGIN
 							    FROM usuario u 
 							    JOIN usuario_rol ur ON u.codusu = ur.id_usuario_rol 
 							    JOIN rol r ON r.codrol = ur.codrol 
-							    WHERE r.nombrerol = 'Administrador' 
+							    WHERE( r.nombrerol = 'Administrador' OR r.nombrerol = 'Responsable') 
 							    AND u.estado_registro = 'activo' 
 							    AND u.codusu = p_creado_por
 							))
