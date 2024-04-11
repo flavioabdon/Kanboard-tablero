@@ -24,6 +24,12 @@ class C_tablero extends CI_Controller {
 	 */
 	public function index()
 	{	
+		// KANBAN-MAN-006, corregir error validar que el usuario este logeado
+		$session_data = $this->session->all_userdata();
+
+		if (!isset($session_data['usuario_login'])) { //Si no encruentra en el array el objeto usuario_login redireccionar al login
+		  redirect('/login', 'location');
+		} else {
 		$idusu 			= $this->session->userdata('id_usuario');
         $json = $this->tablero->obtener_usuario_y_rol($idusu);
 
@@ -32,13 +38,13 @@ class C_tablero extends CI_Controller {
 		$resultado = $datos[0]['resultado'];
 		$datosResultado = json_decode($resultado, true);
 		$rol = $datosResultado['nombrerol'];
-		if($rol =='Administrador' or $rol == 'Responsable'){
-			$this->layout->view('backlog/tablero');
-		}
-		else{
-			$this->layout->view('backlog/tablero_usuario');
-		}
-		
+			if($rol =='Administrador' or $rol == 'Responsable'){
+				$this->layout->view('backlog/tablero');
+			}
+			else{
+				$this->layout->view('backlog/tablero_usuario');
+			}
+	 	}
 	}
 	public function lista_tablero(){
         $json = $this->tablero->listar_tablero();
