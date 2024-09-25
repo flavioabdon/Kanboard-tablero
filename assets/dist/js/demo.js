@@ -129,8 +129,7 @@
   var $sidebar_collapsed_checkbox = $('<input />', {
     type: 'checkbox',
     value: 1,
-    id:'check-colapsed',
-    checked: $('body').hasClass('sidebar-collapse'),
+    checked: $('body').hasClass('sidebar-collapse')||true,
     class: 'mr-1'
   }).on('click', function () {
     if ($(this).is(':checked')) {
@@ -141,6 +140,12 @@
       $(window).trigger('resize')
     }
   })
+
+  if ($sidebar_collapsed_checkbox.prop('checked')) {
+    $('body').addClass('sidebar-collapse');
+    $(window).trigger('resize');
+  }
+
   var $sidebar_collapsed_container = $('<div />', {class: 'mb-1' }).append($sidebar_collapsed_checkbox).append('<span>Collapsed</span>')
   $container.append($sidebar_collapsed_container)
   $sidebar_collapsed_container.attr('id', 'collapsed_chk');
@@ -154,17 +159,24 @@
   var $sidebar_fixed_checkbox = $('<input />', {
     type: 'checkbox',
     value: 1,
-    checked: $('body').hasClass('layout-fixed'),
+    checked: $('body').hasClass('layout-fixed') || true,
     class: 'mr-1'
   }).on('click', function () {
     if ($(this).is(':checked')) {
-      $('body').addClass('layout-fixed')
-      $(window).trigger('resize')
+      $('body').addClass('layout-fixed');
+      $(window).trigger('resize');
     } else {
-      $('body').removeClass('layout-fixed')
-      $(window).trigger('resize')
+      $('body').removeClass('layout-fixed');
+      $(window).trigger('resize');
     }
-  })
+  });
+  
+  // agregar la clase
+  if ($sidebar_fixed_checkbox.prop('checked')) {
+    $('body').addClass('layout-fixed');
+    $(window).trigger('resize');
+  }
+
   var $sidebar_fixed_container = $('<div />', { class: 'mb-1' }).append($sidebar_fixed_checkbox).append('<span>Fixed</span>')
   $container.append($sidebar_fixed_container)
 
@@ -180,13 +192,19 @@
       $('body').removeClass('sidebar-mini')
     }
   })
+
+  if ($sidebar_mini_checkbox.prop('checked')) {
+    $('body').removeClass('sidebar-mini');
+    $(window).trigger('resize');
+  }
+
   var $sidebar_mini_container = $('<div />', { class: 'mb-1' }).append($sidebar_mini_checkbox).append('<span>Sidebar Mini</span>')
   $container.append($sidebar_mini_container)
 
   var $sidebar_mini_md_checkbox = $('<input />', {
     type: 'checkbox',
     value: 1,
-    checked: $('body').hasClass('sidebar-mini-md'),
+    checked: $('body').hasClass('sidebar-mini-md')  ,
     class: 'mr-1'
   }).on('click', function () {
     if ($(this).is(':checked')) {
@@ -201,7 +219,7 @@
   var $sidebar_mini_xs_checkbox = $('<input />', {
     type: 'checkbox',
     value: 1,
-    checked: $('body').hasClass('sidebar-mini-xs'),
+    checked: $('body').hasClass('sidebar-mini-xs') ,
     class: 'mr-1'
   }).on('click', function () {
     if ($(this).is(':checked')) {

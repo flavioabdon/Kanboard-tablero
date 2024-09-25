@@ -1,3 +1,5 @@
+-- Eliminar las tablas existentes
+DROP TABLE IF EXISTS Calendario,  Proyecto, Equipo, Sprint, Permisos, Rol, Incidencia, Historia, Prioridad, Documento, Usuario, Usuario_Rol, Usuario_Permiso, Reunion, Asiste, Notificacion, Backlog;
 
 -- Inserts para la tabla Calendario
 -- INSERT INTO Calendario( fecha, hora, estado_registro, creado_por, modificado_por, fecha_creacion, fecha_modificacion)
@@ -41,10 +43,10 @@ VALUES ('Sprint 1', 3,'Desarrollo', 'activo', 1, 1, CURRENT_TIMESTAMP, CURRENT_T
 --        ( 'Sitio 3', 'Accion 3', 'activo', 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- Inserts para la tabla Rol
--- INSERT INTO Rol( nombreRol, descripcion, estado_registro, creado_por, modificado_por, fecha_creacion, fecha_modificacion)
--- VALUES ( 'Rol 1', 'Descripcion Rol 1', 'activo', 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
---        ( 'Rol 2', 'Descripcion Rol 2', 'activo', 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
---        ( 'Rol 3', 'Descripcion Rol 3', 'activo', 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+ INSERT INTO Rol( nombreRol, descripcion, estado_registro, creado_por, modificado_por, fecha_creacion, fecha_modificacion)
+ VALUES ( 'Administrador', 'Descripcion Rol 1', 'activo', 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+        ( 'Responsable', 'Descripcion Rol 2', 'activo', 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+        ( 'Usuario', 'Descripcion Rol 3', 'activo', 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- Inserts para la tabla Incidencia
 -- INSERT INTO Incidencia( codProyecto, descripcion, estado_registro, creado_por, modificado_por, fecha_creacion, fecha_modificacion)
@@ -72,7 +74,10 @@ VALUES ( 'Alta', 3,'activo', 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 
 -- Inserts para la tabla Usuario , usuario admin, contraseña:123456
       INSERT INTO Usuario( codEqu, nombre, apellido, nombreUsuario, contrasena, cedulaIdentidad, telefono, correo, fechaNacimiento, estado_registro, creado_por, modificado_por, fecha_creacion, fecha_modificacion)
-VALUES (1, 'Administrador', 'admin', 'admin', 'e10adc3949ba59abbe56e057f20f883e', '12345678', '1234567890', 'user1@email.com', '1990-01-01', 'activo', 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+VALUES (
+1, 'Administrador', 'admin', 'admin', 'e10adc3949ba59abbe56e057f20f883e', '12345678', '1234567890', 'user1@email.com', '1990-01-01', 'activo', 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),(
+1, 'Desarrollador', 'user1', 'user1', 'e10adc3949ba59abbe56e057f20f883e', '12345678', '1234567890', 'user1@email.com', '1990-01-01', 'activo', 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),(
+1, 'Analista', 'user2', 'user2', 'e10adc3949ba59abbe56e057f20f883e', '12345678', '1234567890', 'user1@email.com', '1990-01-01', 'activo', 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 --INSERT INTO Usuario( codEqu, nombre, apellido, nombreUsuario, contrasena, cedulaIdentidad, telefono, correo, fechaNacimiento, estado_registro, creado_por, modificado_por, fecha_creacion, fecha_modificacion)
 -- VALUES ( 1, 'Usuario', 'Uno', 'user1', 'password1', '12345678', '1234567890', 'user1@email.com', '1990-01-01', 'activo', 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
@@ -80,8 +85,10 @@ VALUES (1, 'Administrador', 'admin', 'admin', 'e10adc3949ba59abbe56e057f20f883e'
 --        ( 1, 'Usuario', 'Tres', 'user3', 'password3', '34567890', '3456789012', 'user3@email.com', '1992-03-03', 'activo', 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- Inserts para la tabla Usuario_Rol
--- INSERT INTO Usuario_Rol( codRol, codUsuario, fechaInicio, fechaFin, estado_registro, creado_por, modificado_por, fecha_creacion, fecha_modificacion)
--- VALUES ( 1, 1, '2022-01-01', '2022-12-31', 'activo', 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+ INSERT INTO Usuario_Rol( codRol, codUsuario, fechaInicio, fechaFin, estado_registro, creado_por, modificado_por, fecha_creacion, fecha_modificacion)
+ VALUES ( 1, 1, '2022-01-01', '2022-12-31', 'activo', 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),(
+ 1, 1, '2022-01-01', '2022-12-31', 'activo', 2, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),(
+ 1, 1, '2022-01-01', '2022-12-31', 'activo', 3, 3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- Inserts para la tabla Usuario_Permiso
 -- INSERT INTO Usuario_Permiso( codPermiso, codUsuario, fechaPermiso, estado_registro, creado_por, modificado_por, fecha_creacion, fecha_modificacion)
@@ -112,4 +119,3 @@ VALUES (1, 'Administrador', 'admin', 'admin', 'e10adc3949ba59abbe56e057f20f883e'
 -- VALUES ( 1, 1, 2, 3, 'backlog', 'activo', 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 --        ( 2, 1, 3, 1, 'backlog', 'activo', 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 --        ( 3, 1, 1, 2, 'backlog', 'activo', 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-      

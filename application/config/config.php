@@ -24,7 +24,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 // $config['base_url'] = 'http://localhost/kanban/';
-$config['base_url']    = 'http://'.$_SERVER['HTTP_HOST'].'/kanban';
+$config['base_url']    = 'http://'.$_SERVER['HTTP_HOST'].'/Kanboard-tablero';
 /*
 |--------------------------------------------------------------------------
 | Index File
