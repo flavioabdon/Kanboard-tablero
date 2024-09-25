@@ -21,8 +21,8 @@
       </div>
     </section>
 
-    <section class="content pb-3">
-      <div class="container-fluid h-50">
+    <section class="content pb-3 flex-d">
+      <div class="container-fluid" style="height:65vh">
         <div class="card card-row card-secondary" id="columna_backlog">
           <div class="card-header" id="header_backlog">
             <h3 class="card-title">
@@ -1053,6 +1053,6 @@
     // Llamar a cargarContenido inicialmente
     cargarContenido();
 
-    // Actualizar el contenido cada 12
-    setInterval(cargarContenido, 12000);
+    // Actualizar el contenido cada 12 segundos
+    setInterval(cargarContenido, 30000);
 </script>

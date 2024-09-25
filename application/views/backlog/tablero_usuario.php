@@ -17,7 +17,7 @@
     </section>
 
     <section class="content pb-3">
-      <div class="container-fluid h-50">
+    <div class="container-fluid" style="height:65vh">
         <div class="card card-row card-primary" id="columna_to_do">
           <div class="card-header" id="header_to_do">
             <h3 class="card-title">
