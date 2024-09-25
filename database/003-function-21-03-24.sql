@@ -1984,3 +1984,69 @@ END;
 $$ LANGUAGE plpgsql;
 -- -- llamada a la funcion
 -- SELECT * FROM  fn_obtener_usuario_y_rol(2);
+CREATE OR REPLACE FUNCTION fn_mover_todo_a_inprogress(
+    -- tabla backlog
+    p_codbacklog INTEGER,
+    p_creado_por INTEGER
+)
+RETURNS JSON AS $$
+DECLARE
+    result JSON;
+    v_codhistoria INTEGER;
+    v_asignado_a INTEGER;
+    v_codusuario_asignado_por INTEGER;
+BEGIN
+    BEGIN
+        IF (
+            SELECT EXISTS (
+                SELECT * 
+                FROM backlog b 
+                WHERE b.codbacklog = p_codbacklog
+                AND b.estado_registro = 'activo'
+            )
+        ) THEN
+            SELECT b.codusuario_asignado_a INTO v_asignado_a 
+            FROM backlog b 
+            WHERE b.codbacklog = p_codbacklog AND estado_registro = 'activo';
+           
+            SELECT b.codhistoria INTO v_codhistoria  
+            FROM backlog b 
+            WHERE b.codbacklog = p_codbacklog AND estado_registro = 'activo';
+        
+            SELECT b.codusuario_asignado_por INTO v_codusuario_asignado_por 
+            FROM backlog b 
+            WHERE b.codbacklog = p_codbacklog  AND estado_registro = 'activo';
+            
+            UPDATE backlog 
+            SET estado_registro = 'inactivo'
+            WHERE codBacklog = p_codBacklog;
+        
+            INSERT INTO Backlog (
+                codHistoria,
+                codUsuario_asignado_por,
+                codUsuario_asignado_a,
+                estadoHistoria,
+                estado_registro,
+                creado_por,
+                fecha_creacion
+            ) 
+            VALUES (
+                v_codhistoria, 
+                v_codusuario_asignado_por, 
+                v_asignado_a,
+                'inprogress',
+                'activo', 
+                p_creado_por,
+                CURRENT_TIMESTAMP
+            );
+
+            result := '{"estado": "exitoso", "mensaje": "null"}';
+        ELSE
+            result := '{"estado": "error", "mensaje": "No tiene permiso ó eliminado de in progress"}';
+        END IF;
+    EXCEPTION WHEN OTHERS THEN
+        result := json_build_object('estado', 'error', 'mensaje', SQLERRM);
+    END;
+    RETURN result;
+END;
+$$ LANGUAGE plpgsql;
